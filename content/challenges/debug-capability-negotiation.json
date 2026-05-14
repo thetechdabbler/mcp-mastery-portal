@@ -1,0 +1,10 @@
+{
+  "slug": "debug-capability-negotiation",
+  "title": "Debug Broken Capability Negotiation",
+  "difficulty": "mid",
+  "estMinutes": 45,
+  "packageDir": "c-05-debug-capability-negotiation",
+  "summary": "Fix server info/version fields so client initialize succeeds.",
+  "hints": ["Check Implementation name/version"],
+  "acceptance": ["initialize completes"]
+}

@@ -1,0 +1,69 @@
+[
+  {
+    "term": "Model Context Protocol",
+    "slug": "mcp",
+    "aliases": ["MCP"],
+    "definition": "An open protocol that standardizes how applications expose tools, resources, and prompts to LLM hosts.",
+    "refs": [{ "chapter": "01-what-is-mcp" }]
+  },
+  {
+    "term": "JSON-RPC",
+    "slug": "json-rpc",
+    "definition": "A lightweight remote procedure call format using JSON messages over a transport.",
+    "refs": [{ "chapter": "05-json-rpc-and-lifecycle" }]
+  },
+  {
+    "term": "host",
+    "slug": "host",
+    "definition": "The application that embeds the model and owns user experience (e.g. an IDE or assistant UI).",
+    "refs": [{ "chapter": "02-mcp-architecture" }]
+  },
+  {
+    "term": "client",
+    "slug": "client",
+    "definition": "The MCP client inside the host that maintains sessions and talks to MCP servers.",
+    "refs": [{ "chapter": "02-mcp-architecture" }]
+  },
+  {
+    "term": "server",
+    "slug": "server",
+    "definition": "An MCP server process that exposes capabilities (tools/resources/prompts) over a transport.",
+    "refs": [{ "chapter": "02-mcp-architecture" }]
+  },
+  {
+    "term": "stdio",
+    "slug": "stdio",
+    "definition": "Transport where the host spawns a server child process and exchanges JSON-RPC over stdin/stdout.",
+    "refs": [{ "chapter": "06-stdio-transport" }]
+  },
+  {
+    "term": "Streamable HTTP",
+    "slug": "streamable-http",
+    "definition": "HTTP-based MCP transport using POST/GET (and optional streaming) replacing older HTTP+SSE patterns.",
+    "refs": [{ "chapter": "07-streamable-http" }]
+  },
+  {
+    "term": "tool poisoning",
+    "slug": "tool-poisoning",
+    "definition": "Indirect prompt injection via tool metadata or outputs that steer the model when tools are listed or summarized.",
+    "refs": [{ "chapter": "11-security-foundations" }]
+  },
+  {
+    "term": "prompt injection",
+    "slug": "prompt-injection",
+    "definition": "Attacker-controlled text that manipulates model behavior by appearing in the model context.",
+    "refs": [{ "chapter": "11-security-foundations" }]
+  },
+  {
+    "term": "capability negotiation",
+    "slug": "capability-negotiation",
+    "definition": "Handshake where client and server agree on supported protocol features before normal operation.",
+    "refs": [{ "chapter": "05-json-rpc-and-lifecycle" }]
+  },
+  {
+    "term": "Zod",
+    "slug": "zod",
+    "definition": "TypeScript-first schema library used by the MCP TypeScript SDK for tool and prompt argument validation.",
+    "refs": [{ "chapter": "08-building-real-tools" }]
+  }
+]

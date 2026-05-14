@@ -1,0 +1,10 @@
+{
+  "slug": "unsafe-to-readonly-resource",
+  "title": "Convert Unsafe File Access to Read-only Resource",
+  "difficulty": "mid",
+  "estMinutes": 40,
+  "packageDir": "c-03-unsafe-to-readonly-resource",
+  "summary": "Expose safe read-only resource instead of arbitrary path tool.",
+  "hints": ["Use registerResource", "Jail paths"],
+  "acceptance": ["resource exists", "path traversal blocked"]
+}

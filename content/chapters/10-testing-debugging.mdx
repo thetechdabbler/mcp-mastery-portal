@@ -1,0 +1,98 @@
+---
+slug: "10-testing-debugging"
+title: "Testing & Debugging MCP Servers — Make Failure Boring"
+subtitle: "If your only test is 'Claude liked it', you don't have tests."
+order: 10
+difficulty: "mid"
+estMinutes: 32
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Structure tests around protocol boundaries
+  - Use logging without corrupting stdio
+  - Build minimal repro harnesses for tool calls
+diagrams:
+  - "test-harness-topo"
+quiz:
+  - q: "Golden tests for MCP servers should assert on…"
+    options:
+      - "Only log line colors"
+      - "Structured tool results and error codes"
+      - "GPU temperature"
+      - "Emoji density"
+    answer: 1
+    explain: "Assertions should target protocol-visible behavior."
+  - q: "Why log to stderr in stdio servers?"
+    options:
+      - "stdout is the JSON-RPC channel"
+      - "stderr is faster on Windows"
+      - "Because journald requires it"
+      - "Because stdout is encrypted"
+    answer: 0
+    explain: "stdout is reserved for JSON-RPC messages."
+  - q: "Flaky tests that depend on wall-clock timing are bad because…"
+    options:
+      - "CI becomes non-deterministic"
+      - "They make fonts prettier"
+      - "They improve GPU utilization"
+      - "They remove need for mocks"
+    answer: 0
+    explain: "Deterministic tests catch regressions; timing flakes hide failures."
+references:
+  - label: "TypeScript SDK"
+    url: "https://github.com/modelcontextprotocol/typescript-sdk"
+---
+
+## The setup
+
+MCP servers fail in three places: **negotiation**, **schema**, and **business logic**. Test all three, in that order, cheapest first.
+
+## Picture this
+
+<Diagram id="test-harness-topo" caption="Test runner drives in-memory or fixture transport into server under test." alt="Diagram test harness transport server">
+
+{`flowchart LR
+  tests[Vitest_runner] --> harness[Test_transport]
+  harness --> server[Server_under_test]`}
+
+</Diagram>
+
+## Mental model
+
+Treat your server like a library with a **wire protocol façade**—unit test the core, contract test the façade.
+
+## Walkthrough
+
+- Snapshot stable JSON outputs—not full timestamps unless frozen.
+- Add regression tests for **bad model inputs** (they will happen).
+- Build a tiny “fake client” script for reproducing bugs.
+
+## Hall of Shame
+
+<HallOfShame tag="observability" title="printf debugging on stdout">
+
+```ts
+console.log(JSON.stringify(req));
+```
+
+**Fix:** structured logs to stderr; redact secrets.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Incidents love **non-reproducible** bugs. Protocol-level tests turn “Claude weirdness” into failing CI.
+
+## Mini challenge
+
+Write one test that asserts a tool rejects a path traversal payload.
+
+## Reflection
+
+What’s the smallest harness that would have caught your last bug in 10 minutes?
+
+## You can now brag that…
+
+You can debug MCP without asking the model what it thinks went wrong (you can still ask—just don’t believe).

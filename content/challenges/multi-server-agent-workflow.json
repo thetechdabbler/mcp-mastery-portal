@@ -1,0 +1,10 @@
+{
+  "slug": "multi-server-agent-workflow",
+  "title": "Multi-Server Agent Workflow",
+  "difficulty": "nightmare",
+  "estMinutes": 60,
+  "packageDir": "c-11-multi-server-agent-workflow",
+  "summary": "Expose planner and executor tools with distinct prefixes.",
+  "hints": ["Namespace tool names"],
+  "acceptance": ["both tools exist"]
+}

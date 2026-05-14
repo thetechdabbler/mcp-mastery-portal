@@ -1,0 +1,102 @@
+---
+slug: "08-building-real-tools"
+title: "Building Real Tools — Schemas, Side Effects, and Self-Control"
+subtitle: "If your schema is optional, your incident report will be mandatory."
+order: 8
+difficulty: "mid"
+estMinutes: 34
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 5
+objectives:
+  - Design tool schemas that reject ambiguous inputs
+  - Separate domain logic from MCP adapter code
+  - Use structured tool results instead of vague strings
+diagrams:
+  - "tool-cancel-progress"
+quiz:
+  - q: "Tool descriptions are also…"
+    options:
+      - "Ignored by models"
+      - "Part of the attack surface for indirect prompt injection"
+      - "Encrypted automatically"
+      - "Validated by TLS only"
+    answer: 1
+    explain: "Models read descriptions; poisoned text steers behavior."
+  - q: "Structured tool results help because…"
+    options:
+      - "They look enterprise"
+      - "Downstream code can validate and log deterministically"
+      - "They replace databases"
+      - "They remove need for auth"
+    answer: 1
+    explain: "Structured content is easier to validate and audit."
+  - q: "Tool descriptions should be treated as…"
+    options:
+      - "Untrusted attacker-controlled text"
+      - "Cryptographically signed binaries"
+      - "Immutable bytecode"
+      - "Optional decoration with no effect"
+    answer: 0
+    explain: "Models read descriptions; treat them as part of the attack surface."
+references:
+  - label: "OWASP MCP Tool Poisoning"
+    url: "https://owasp.org/www-community/attacks/MCP_Tool_Poisoning"
+---
+
+## The setup
+
+“Real tools” means **schemas**, **timeouts**, **cancellation**, and **structured errors**—not vibes.
+
+## Picture this
+
+<Diagram id="tool-cancel-progress" caption="Long tool: client may cancel; server can emit progress notifications." alt="Sequence diagram tool call cancel progress">
+
+{`sequenceDiagram
+  participant Client
+  participant Server
+  Client->>Server: tools/call
+  Server-->>Client: notifications/progress
+  Client->>Server: cancel_signal
+  Server-->>Client: partial_or_error_result`}
+
+</Diagram>
+
+## Mental model
+
+Treat tools like RPC endpoints exposed to an **adaptive adversary** (the model).
+
+## Walkthrough
+
+- Keep handlers thin; push domain logic into testable modules.
+- Prefer explicit enums over `string` for modes.
+- Return errors as **machine-readable** MCP errors when possible.
+
+## Hall of Shame
+
+<HallOfShame tag="validation" title="cmd string strikes again">
+
+```ts
+inputSchema: { cmd: z.string() }
+```
+
+**Fix:** enumerate operations; never expose raw shells to models.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Every missing validation is a **silent feature** for attackers—internal or external.
+
+## Mini challenge
+
+Pick one tool and delete half its parameters—what breaks? That’s your real API surface.
+
+## Reflection
+
+Which tool in your design is actually three tools wearing a trench coat?
+
+## You can now brag that…
+
+You can defend a tool schema in code review without saying “the model won’t do that.”

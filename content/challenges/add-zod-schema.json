@@ -1,0 +1,10 @@
+{
+  "slug": "add-zod-schema",
+  "title": "Add JSON Schema Validation",
+  "difficulty": "warmup",
+  "estMinutes": 30,
+  "packageDir": "c-02-add-zod-schema",
+  "summary": "Ensure invalid types are rejected at validation boundary.",
+  "hints": ["Reject non-numbers", "Prefer registerTool inputSchema"],
+  "acceptance": ["Invalid args produce tool error"]
+}

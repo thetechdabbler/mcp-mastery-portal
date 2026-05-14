@@ -1,0 +1,106 @@
+---
+slug: "15-capstone-project"
+title: "Capstone — Enterprise Developer Assistant MCP Server (The Final Boss)"
+subtitle: "If this feels like work, congratulations: you’re ready for production."
+order: 15
+difficulty: "nightmare"
+estMinutes: 60
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 8
+objectives:
+  - Implement read-only resources, guarded writes, audit logs, and approvals
+  - Defend path operations against traversal
+  - Explain how each capstone piece maps to governance controls
+diagrams:
+  - "capstone-architecture"
+quiz:
+  - q: "Write tools in the capstone require what extra control?"
+    options:
+      - "Nothing, writes are safe"
+      - "Human approval + audit log entries"
+      - "Only prettier"
+      - "A new DNS zone"
+    answer: 1
+    explain: "Mutations get explicit approval queues and append-only auditing."
+  - q: "Path traversal defenses should happen…"
+    options:
+      - "Only in the README"
+      - "At a single normalization boundary before touching FS"
+      - "In the model"
+      - "In CSS"
+    answer: 1
+    explain: "Normalize, realpath, enforce roots—once, centrally."
+  - q: "Audit logs are most useful when they are…"
+    options:
+      - "Append-only, structured, and correlated with identity"
+      - "Printed to stdout"
+      - "Stored only in RAM"
+      - "Encrypted with rot13"
+    answer: 0
+    explain: "Tamper-evident structured logs support investigations."
+references:
+  - label: "Capstone lab"
+    url: "/labs/lab-10-capstone-enterprise-mcp-server"
+---
+
+## The setup
+
+The capstone is a **mini production system**: read surfaces, prompt templates, safe automation, guarded mutation, and receipts.
+
+## Picture this
+
+<Diagram id="capstone-architecture" caption="Capstone: read resources, tools, approval queue, hash-chained audit log." alt="Capstone architecture diagram">
+
+{`flowchart TB
+  subgraph reads [Read_plane]
+    code[code_search_resource]
+    docs[docs_resource]
+  end
+  subgraph writes [Write_plane]
+    approve[Approval_queue]
+    write[write_file_tool]
+  end
+  audit[Audit_JSONL_hash_chain]
+  reads --> audit
+  writes --> audit
+  approve --> write`}
+
+</Diagram>
+
+## Mental model
+
+If you can’t explain each arrow to security, you’re not done.
+
+## Walkthrough
+
+Follow `labs/lab-10-capstone-enterprise-mcp-server` and `challenges/capstone-internal-dev-assistant`.
+
+## Hall of Shame
+
+<HallOfShame tag="security" title="Audit log as console.log">
+
+```ts
+console.log("wrote file");
+```
+
+**Fix:** append-only structured events with integrity chaining and redaction rules.
+
+</HallOfShame>
+
+## Why this matters in production
+
+This is the shape of an internal assistant that won’t age into a liability in six weeks.
+
+## Mini challenge
+
+Threat-model the approval queue: who can approve, what’s logged, what’s replay-safe?
+
+## Reflection
+
+What would you cut if you had one day to ship—without lying about risk?
+
+## You can now brag that…
+
+You built the “boring” parts on purpose—and that’s why it’s actually impressive.

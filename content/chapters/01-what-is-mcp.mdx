@@ -1,0 +1,125 @@
+---
+slug: "01-what-is-mcp"
+title: "What MCP Is (And Why It Exists)"
+subtitle: "Spoiler: it's not another YAML config format. Unfortunately."
+order: 1
+difficulty: "warmup"
+estMinutes: 20
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 5
+objectives:
+  - Explain the M×N integration problem MCP solves
+  - Contrast MCP with ad-hoc HTTP and vendor function calling
+  - Name the three MCP primitives at a high level
+diagrams:
+  - "mxn-before-after"
+quiz:
+  - q: "What problem does MCP primarily reduce?"
+    options:
+      - "GPU cost"
+      - "Repeated host↔backend integration work"
+      - "CSS specificity wars"
+      - "DNS propagation time"
+    answer: 1
+    explain: "MCP standardizes how hosts attach tools/resources/prompts to models."
+  - q: "Which statement is closest to the truth?"
+    options:
+      - "MCP replaces your database"
+      - "MCP standardizes capability wiring between hosts and servers"
+      - "MCP is a model training framework"
+      - "MCP is mandatory for TypeScript"
+    answer: 1
+    explain: "MCP is a protocol for exposing capabilities to model hosts."
+  - q: "Which primitive is usually best for read-only slices of data?"
+    options:
+      - "A write tool"
+      - "A resource"
+      - "A prompt template"
+      - "A Dockerfile"
+    answer: 1
+    explain: "Resources model addressable read data; tools imply side effects."
+  - q: "JSON-RPC in MCP is mainly about…"
+    options:
+      - "Pretty JSON logs"
+      - "Framed messages for requests, responses, and notifications"
+      - "YAML interop"
+      - "Protobuf compatibility"
+    answer: 1
+    explain: "MCP uses JSON-RPC message shapes over transports like stdio or Streamable HTTP."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+  - label: "MCP Overview"
+    url: "https://modelcontextprotocol.io/"
+---
+
+## The setup
+
+You already know APIs. MCP is a **host ↔ client ↔ server** contract for attaching **tools**, **resources**, and **prompts** to models—without every IDE vendor reinventing the same brittle glue.
+
+## Picture this
+
+<Diagram id="mxn-before-after" caption="Before MCP: hosts re-integrate every backend. After MCP: each domain ships one server." alt="Flowchart comparing many host-backend arrows vs host through MCP client to multiple servers">
+
+{`flowchart LR
+  subgraph before [Before_MCP]
+    H1[HostA] --> B1[Backend1]
+    H1 --> B2[Backend2]
+    H2[HostB] --> B1
+    H2 --> B3[Backend3]
+  end
+  subgraph after [With_MCP]
+    H3[Host] --> C[MCP_Client]
+    C --> S1[Server1]
+    C --> S2[Server2]
+  end`}
+
+</Diagram>
+
+## Mental model
+
+Treat **Model Context Protocol** like a typed plugin surface: the model never “just calls HTTP”; the **host** mediates, the **client** speaks JSON-RPC, the **server** exposes capabilities with schemas.
+
+## Walkthrough
+
+### MCP vs alternatives (tradeoffs, not marketing)
+
+| Approach | Upside | Downside |
+| --- | --- | --- |
+| Vendor function calling | polished DX | lock-in, bespoke discovery |
+| Ad-hoc REST | maximum flexibility | no standard capability listing |
+| MCP | interop + discovery | you must own security + governance |
+
+### Comparison you actually asked for
+
+OpenAI-style function calling is great—inside one vendor ecosystem. MCP’s bet is **multi-host, multi-server, multi-vendor** interoperability with a shared mental model.
+
+## Hall of Shame
+
+<HallOfShame tag="architecture" title="Integration tourism">
+
+```txt
+"We'll expose 40 REST endpoints and let the model guess URLs."
+```
+
+**Fix:** expose **tools** with explicit schemas, **resources** for reads, **prompts** for repeatable templates—then enforce auth at the boundary.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Interop is a cost center until it isn't. MCP moves integration work from **every host** to **one MCP server per domain**—but only if you treat schemas, auth, auditing, and supply-chain risk as first-class.
+
+## Mini challenge
+
+Pick three internal systems you operate (docs, CI, ticketing). For each, list one **read** surface and one **mutating** action—then classify each line as tool, resource, or prompt.
+
+## Reflection
+
+Where would MCP **not** be worth the ceremony in the next 90 days?
+
+## You can now brag that…
+
+You can explain MCP without calling it “a wrapper around curl” (even if, under the hood, physics remains physics).

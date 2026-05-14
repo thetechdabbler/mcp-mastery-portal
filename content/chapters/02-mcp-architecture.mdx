@@ -1,0 +1,107 @@
+---
+slug: "02-mcp-architecture"
+title: "Host, Client, Server — The Topology That Saves Your Sanity"
+subtitle: "Three words you will misuse at least once. Let's fix that early."
+order: 2
+difficulty: "warmup"
+estMinutes: 22
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Map host vs client vs server responsibilities
+  - Explain why the host still owns UX and policy
+  - Identify where JSON-RPC messages originate and terminate
+diagrams:
+  - "host-client-server-topology"
+quiz:
+  - q: "Who owns the user-visible experience and policy knobs?"
+    options:
+      - "The MCP server"
+      - "The host application"
+      - "The transport"
+      - "The GPU driver"
+    answer: 1
+    explain: "The host embeds the model and decides what servers are allowed to run."
+  - q: "The MCP client primarily…"
+    options:
+      - "Renders React"
+      - "Maintains sessions and JSON-RPC to servers"
+      - "Trains models"
+      - "Compiles LLVM"
+    answer: 1
+    explain: "Clients are protocol engines living inside the host."
+  - q: "An MCP server should be written as…"
+    options:
+      - "A giant prompt string"
+      - "A focused capability surface with schemas"
+      - "A blockchain"
+      - "A CSS framework"
+    answer: 1
+    explain: "Servers expose tools/resources/prompts with explicit contracts."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+If you blur **host**, **client**, and **server**, you’ll design “helpful” tools that bypass every safety rail the host tried to install.
+
+## Picture this
+
+<Diagram id="host-client-server-topology" caption="Host embeds model + UI; client multiplexes JSON-RPC; servers expose capabilities." alt="Diagram with host containing client connected to two MCP servers">
+
+{`flowchart TB
+  subgraph host [Host_app]
+    UI[UI]
+    MODEL[Model_runtime]
+    CLIENT[MCP_client]
+    UI --> MODEL
+    MODEL --> CLIENT
+  end
+  CLIENT --> S1[Server_A]
+  CLIENT --> S2[Server_B]`}
+
+</Diagram>
+
+## Mental model
+
+**Host** owns consent and policy. **Client** translates host intent into JSON-RPC. **Server** answers with tools/resources/prompts—nothing more romantic than that.
+
+## Walkthrough
+
+### Responsibilities
+
+- **Host**: launches servers (stdio) or connects HTTP, shows UI, applies org policy.
+- **Client**: capability negotiation, subscriptions, tool calls, error surfacing.
+- **Server**: business logic adapter + schema validation + least privilege.
+
+## Hall of Shame
+
+<HallOfShame tag="architecture" title="Host == Server">
+
+```txt
+"The LLM is basically the MCP host, right?"
+```
+
+**Fix:** the model proposes; the **host** decides; the **client** executes protocol; the **server** performs side effects.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Policy engines attach to **hosts**. If you pretend the server is sovereign, you’ll ship “helpful” remote admin tools and wonder why Security shows up with PDFs.
+
+## Mini challenge
+
+Draw your org’s deployment: where does auth terminate? Where are logs emitted? Where is PII filtered?
+
+## Reflection
+
+Which responsibility does your team currently skip because “the model will handle it”?
+
+## You can now brag that…
+
+You can point to a diagram without saying “microservices, but AI”.

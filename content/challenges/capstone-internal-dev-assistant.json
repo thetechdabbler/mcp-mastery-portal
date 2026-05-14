@@ -1,0 +1,10 @@
+{
+  "slug": "capstone-internal-dev-assistant",
+  "title": "Capstone: Secure Internal Developer Assistant",
+  "difficulty": "nightmare",
+  "estMinutes": 90,
+  "packageDir": "c-12-capstone-internal-dev-assistant",
+  "summary": "Ship resources, prompts, guarded writes, audit logging.",
+  "hints": ["Follow lab-10 solution shape"],
+  "acceptance": ["code search resource", "write requires approval"]
+}

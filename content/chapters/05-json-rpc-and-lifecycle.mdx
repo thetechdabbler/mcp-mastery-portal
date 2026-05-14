@@ -1,0 +1,99 @@
+---
+slug: "05-json-rpc-and-lifecycle"
+title: "JSON-RPC + MCP Lifecycle — The Boring Part That Saves You"
+subtitle: "Capability negotiation: it's like dating, but with fewer emojis and more `initialize`."
+order: 5
+difficulty: "mid"
+estMinutes: 30
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Trace initialize → capabilities → steady state
+  - Differentiate requests, responses, notifications
+  - Relate lifecycle to transport restarts and version skew
+diagrams:
+  - "json-rpc-anatomy"
+quiz:
+  - q: "Which message class is not expecting a paired response?"
+    options:
+      - "Request"
+      - "Notification"
+      - "Response"
+      - "Handshake TLS"
+    answer: 1
+    explain: "Notifications are one-way JSON-RPC messages."
+  - q: "Capability negotiation exists to…"
+    options:
+      - "Make logs longer"
+      - "Agree on optional features before traffic"
+      - "Replace DNS"
+      - "Compile TypeScript faster"
+    answer: 1
+    explain: "Clients and servers declare what they can speak."
+  - q: "Notifications differ from requests because…"
+    options:
+      - "They never include an id field"
+      - "They always return binary"
+      - "They require TLS client certs"
+      - "They are only used for streaming video"
+    answer: 0
+    explain: "Notifications omit id so they are not correlated as request/response pairs."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+MCP rides **JSON-RPC**. If you treat messages like REST paths, you’ll mis-handle notifications and lifecycle edge cases.
+
+## Picture this
+
+<Diagram id="json-rpc-anatomy" caption="Request/response vs notification shapes (conceptual)." alt="Diagram three boxes request response notification">
+
+{`flowchart TB
+  req[Request_id_method_params]
+  res[Response_id_result_or_error]
+  notif[Notification_method_params_no_id]`}
+
+</Diagram>
+
+## Mental model
+
+**Initialize** is where both sides show their homework. After that, steady-state traffic is cheaper—but **reconnect** paths must be idempotent.
+
+## Walkthrough
+
+- Requests carry `id` and expect `result` or `error`.
+- Notifications never block the caller waiting for a response.
+- Lifecycle restarts happen more than you’d like—design handlers to be safe on duplicate init.
+
+## Hall of Shame
+
+<HallOfShame tag="lifecycle" title="Skip initialize">
+
+```txt
+"Just start calling tools; it worked on my laptop."
+```
+
+**Fix:** always complete negotiation; SDKs enforce this—don’t fight them.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Version skew between hosts and servers is normal. Lifecycle discipline is how you avoid **silent partial feature** bugs.
+
+## Mini challenge
+
+List three notifications your server might emit during long tools—when would you downgrade to logs instead?
+
+## Reflection
+
+Where is your code assuming a single long-lived session forever?
+
+## You can now brag that…
+
+You can whiteboard JSON-RPC lifecycles without drawing REST status codes as a coping mechanism.

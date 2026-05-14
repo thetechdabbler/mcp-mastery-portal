@@ -1,0 +1,10 @@
+{
+  "slug": "structured-errors",
+  "title": "Add Structured Errors",
+  "difficulty": "mid",
+  "estMinutes": 40,
+  "packageDir": "c-06-structured-errors",
+  "summary": "Return MCP tool errors with clear codes for invalid input.",
+  "hints": ["Use isError", "Include message"],
+  "acceptance": ["invalid input returns isError true"]
+}

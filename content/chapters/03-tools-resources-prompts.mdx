@@ -1,0 +1,101 @@
+---
+slug: "03-tools-resources-prompts"
+title: "Tools vs Resources vs Prompts — Stop Guessing"
+subtitle: "Pick the wrong primitive and your security reviewer will pick you."
+order: 3
+difficulty: "warmup"
+estMinutes: 24
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Choose tools vs resources vs prompts for common scenarios
+  - Explain schema requirements for tools
+  - Avoid using tools as a filesystem grab-bag
+diagrams:
+  - "trp-decision-tree"
+quiz:
+  - q: "Best fit: read a slice of a wiki page by stable URI?"
+    options:
+      - "Tool that shells out to curl"
+      - "Resource"
+      - "Prompt"
+      - "A Slack DM"
+    answer: 1
+    explain: "Resources represent addressable read data."
+  - q: "Best fit: run a database migration?"
+    options:
+      - "Resource template"
+      - "Tool with explicit validation + approvals"
+      - "Prompt"
+      - "A favicon.ico"
+    answer: 1
+    explain: "Mutations belong in tools with strict schemas and governance."
+  - q: "Prompt templates shine when…"
+    options:
+      - "You need repeatable instructions with arguments"
+      - "You need raw SQL sockets"
+      - "You need binary video streams"
+      - "You need to patch Linux kernels"
+    answer: 0
+    explain: "Prompts package reusable instruction shapes for the model."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+Primitives are boring until they’re wrong—then they’re **incidents**.
+
+## Picture this
+
+<Diagram id="trp-decision-tree" caption="Decision tree: side effects? choose tool. stable read URI? resource. repeatable instruction? prompt." alt="Mermaid flowchart for tool resource prompt selection">
+
+{`flowchart TD
+  start[Need_capability] --> side[Side_effects_or_mutations]
+  side -->|yes| tool[Tool_with_schema]
+  side -->|no| uri[Stable_URI_read]
+  uri -->|yes| res[Resource]
+  uri -->|no| prompt[Prompt_template]`}
+
+</Diagram>
+
+## Mental model
+
+- **Tools**: imperative verbs with validated args—assume hostile inputs.
+- **Resources**: nouns you can **read**—great for docs, configs, code slices.
+- **Prompts**: packaged reasoning patterns—parameterized, versioned, reviewed.
+
+## Walkthrough
+
+If you expose a giant “doAnything” tool, you didn’t discover AGI—you discovered **incident response**.
+
+## Hall of Shame
+
+<HallOfShame tag="validation" title="Tool as filesystem">
+
+```ts
+tool("read_file", { path: z.string() }, async ({ path }) => fs.readFile(path));
+```
+
+**Fix:** resources with roots + normalization, or tools with allowlists + realpath checks.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Primitives are your **authorization story**. Resources are easier to cache and audit; tools should be few and tightly scoped.
+
+## Mini challenge
+
+Rewrite one “read tool” in your design as a **resource** with a URI template—what breaks?
+
+## Reflection
+
+Where are you using a tool because MDX examples did, not because the operation is imperative?
+
+## You can now brag that…
+
+You can defend a TRP choice in a design review without hand-waving “the LLM will figure it out.”

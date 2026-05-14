@@ -1,0 +1,10 @@
+{
+  "slug": "enterprise-governance-checklist",
+  "title": "Enterprise MCP Governance Checklist",
+  "difficulty": "boss",
+  "estMinutes": 30,
+  "packageDir": "c-10-enterprise-governance-checklist",
+  "summary": "Author a markdown governance checklist with required headings.",
+  "hints": ["Use headings exactly as specified"],
+  "acceptance": ["validator reads CHECKLIST.md"]
+}

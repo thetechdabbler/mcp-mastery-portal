@@ -1,0 +1,135 @@
+---
+slug: "11-security-foundations"
+title: "Security Foundations — MCP Is a Trust Machine, Not a Magic Safe"
+subtitle: "Tool poisoning isn't a corner case. It's Tuesday."
+order: 11
+difficulty: "boss"
+estMinutes: 45
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 7
+objectives:
+  - Build a threat model for host/client/server/data plane
+  - Explain description injection and rug-pull updates
+  - "Map mitigations: allowlists, pinning, tiered trust, structured validation"
+diagrams:
+  - "threat-model-overview"
+  - "tool-poisoning-flow"
+  - "cross-tool-laundering"
+quiz:
+  - q: "Tool poisoning often arrives via…"
+    options:
+      - "Only kernel exploits"
+      - "Tool metadata/descriptions and tool outputs influencing the model"
+      - "TLS cipher suites"
+      - "Git LFS"
+    answer: 1
+    explain: "Indirect prompt injection via tool channels is the common failure mode."
+  - q: "Human approval as the only control tends to fail because…"
+    options:
+      - "Humans love clicking approve"
+      - "Humans fatigue and rubber-stamp"
+      - "Humans cannot read JSON"
+      - "Humans hate UIs"
+    answer: 1
+    explain: "Vigilance decays; approvals need scaffolding, defaults, and break-glass."
+  - q: "A practical supply-chain control for MCP servers is…"
+    options:
+      - "Hope"
+      - "Allowlist + version pinning + integrity checks"
+      - "More logs"
+      - "Longer passwords"
+    answer: 1
+    explain: "Treat servers like dependencies you deploy."
+references:
+  - label: "OWASP MCP Tool Poisoning"
+    url: "https://owasp.org/www-community/attacks/MCP_Tool_Poisoning"
+  - label: "Microsoft: indirect injection and MCP"
+    url: "https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp"
+---
+
+## The setup
+
+MCP doesn’t remove attackers—it **organizes** where they show up: descriptions, tool outputs, third-party servers, and over-broad tools.
+
+## Picture this
+
+<Diagram id="threat-model-overview" caption="Trust boundaries: model, host policy, client protocol, server, downstream systems." alt="Trust boundary diagram">
+
+{`flowchart TB
+  model[Model]
+  host[Host_policy]
+  client[MCP_client]
+  server[MCP_server]
+  data[Downstream_systems]
+  model <--> host
+  host <--> client
+  client <--> server
+  server <--> data`}
+
+</Diagram>
+
+<Diagram id="tool-poisoning-flow" caption="Poisoned description/metadata enters host context without invoking the tool." alt="Sequence diagram tool poisoning">
+
+{`sequenceDiagram
+  participant Server
+  participant Client
+  participant Model
+  Server-->>Client: tools/list_metadata
+  Client-->>Model: metadata_in_context
+  Note over Model: Instructions_in_description_mislead_planner`}
+
+</Diagram>
+
+<Diagram id="cross-tool-laundering" caption="Low-trust tool output becomes high-trust input to another tool." alt="Sequence cross tool laundering">
+
+{`sequenceDiagram
+  participant Model
+  participant T1 as Low_trust_tool
+  participant T2 as High_privilege_tool
+  Model->>T1: call
+  T1-->>Model: attacker_text
+  Model->>T2: passes_text_as_args`}
+
+</Diagram>
+
+## Mental model
+
+Four primitives to remember: **description injection**, **rug-pull updates**, **cross-tool laundering**, **schema confusion**.
+
+## Walkthrough
+
+### Mitigations that survive contact with reality
+
+- Tier servers: read-only vs mutating vs break-glass.
+- Pin versions; review diffs on upgrades like any dependency.
+- Separate “planner context” from “executor context” where feasible.
+
+## Hall of Shame
+
+<HallOfShame tag="security" title="Trust the marketplace">
+
+```txt
+"Install random MCP server; enable all tools; ship."
+```
+
+**Fix:** allowlist, review, sandbox risky tools, monitor exfil patterns.
+
+</HallOfShame>
+
+## Why this matters in production
+
+The model is not your user—it’s an **adaptive interface** between users and your systems.
+
+## Mini challenge
+
+Write a one-page threat model for your highest-privilege tool: assets, adversaries, controls.
+
+## Reflection
+
+Which mitigation are you skipping because it’s socially inconvenient?
+
+## You can now brag that…
+
+You can say “tool poisoning” in a meeting without people assuming you’re being dramatic (you’re being accurate).

@@ -1,0 +1,10 @@
+{
+  "slug": "human-approval-write",
+  "title": "Human Approval Before Writes",
+  "difficulty": "boss",
+  "estMinutes": 55,
+  "packageDir": "c-09-human-approval-write",
+  "summary": "Write tool requires explicit approval token in args.",
+  "hints": ["Two-phase approve then commit"],
+  "acceptance": ["missing approval rejected"]
+}

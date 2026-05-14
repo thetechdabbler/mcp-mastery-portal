@@ -1,0 +1,10 @@
+{
+  "slug": "pr-review-prompt",
+  "title": "PR Review Prompt Template",
+  "difficulty": "mid",
+  "estMinutes": 35,
+  "packageDir": "c-04-pr-review-prompt",
+  "summary": "Register a parameterized prompt for PR review.",
+  "hints": ["registerPrompt with argsSchema"],
+  "acceptance": ["prompt listed", "getPrompt returns messages"]
+}

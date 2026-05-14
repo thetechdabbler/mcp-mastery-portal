@@ -1,0 +1,102 @@
+---
+slug: "04-first-mcp-server"
+title: "Your First MCP Server (stdio, Zod, Zero Drama)"
+subtitle: "Built small. Still more disciplined than most marketplace servers."
+order: 4
+difficulty: "warmup"
+estMinutes: 28
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 5
+objectives:
+  - Boot an MCP server with StdioServerTransport
+  - Register a tool using Zod input schemas
+  - Explain why stdout must stay clean for JSON-RPC
+diagrams:
+  - "first-server-sequence"
+quiz:
+  - q: "Why must servers avoid println debug spam on stdout?"
+    options:
+      - "Because stdout is JSON-RPC wire traffic"
+      - "Because GPUs hate text"
+      - "Because npm said so"
+      - "Because TLS requires it"
+    answer: 0
+    explain: "stdio multiplexes JSON-RPC on stdout—noise corrupts framing."
+  - q: "McpServer + StdioServerTransport is primarily for…"
+    options:
+      - "Local child processes"
+      - "Only Kubernetes"
+      - "GPU kernels"
+      - "Excel macros"
+    answer: 0
+    explain: "stdio transport is the classic local integration path."
+  - q: "Tool input schemas exist to…"
+    options:
+      - "Make types prettier in IDEs"
+      - "Reject invalid model-proposed args before handlers run"
+      - "Replace OAuth"
+      - "Compress prompts"
+    answer: 1
+    explain: "Schemas validate at the boundary—treat them as security controls."
+references:
+  - label: "TypeScript SDK"
+    url: "https://github.com/modelcontextprotocol/typescript-sdk"
+---
+
+## The setup
+
+You’ll use `McpServer` from `@modelcontextprotocol/sdk/server/mcp.js` and `StdioServerTransport`—the same primitives the labs compile against.
+
+## Picture this
+
+<Diagram id="first-server-sequence" caption="stdio MCP: stdin JSON-RPC in, stdout JSON-RPC out, handler executes tool." alt="Sequence diagram host client server stdio">
+
+{`sequenceDiagram
+  participant Host
+  participant Server
+  Host->>Server: JSON-RPC_request/stdin
+  Server->>Server: validate_schema
+  Server->>Host: JSON-RPC_response/stdout`}
+
+</Diagram>
+
+## Mental model
+
+Your server is a **JSON-RPC worker** with superpowers: advertise tools, validate inputs, return structured content.
+
+## Walkthrough
+
+1. Create `McpServer` with name/version.
+2. `registerTool` with `inputSchema` as Zod shapes.
+3. `connect(new StdioServerTransport())`.
+4. Log to **stderr** only.
+
+## Hall of Shame
+
+<HallOfShame tag="transport" title="stdout logging">
+
+```ts
+console.log("debug", payload);
+```
+
+**Fix:** `console.error` or structured logging to stderr; keep stdout pristine.
+
+</HallOfShame>
+
+## Why this matters in production
+
+stdio servers inherit the host’s user—**ambient authority** is real. Tiny bugs become exfiltration because the model is an adversarial caller.
+
+## Mini challenge
+
+Add a tool that **cannot** succeed unless schema validation rejects bad types—prove it with a manual JSON-RPC call.
+
+## Reflection
+
+What’s your first **deny-by-default** rule for tool args?
+
+## You can now brag that…
+
+You shipped a stdio MCP server without echoing JSON-RPC to the console like a fireworks show.

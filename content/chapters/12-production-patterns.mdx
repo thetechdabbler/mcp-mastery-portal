@@ -1,0 +1,105 @@
+---
+slug: "12-production-patterns"
+title: "Production Patterns — Gateways, Auth, and Boring Reliability"
+subtitle: "If your MCP deployment diagram looks like modern art, it’s not production yet."
+order: 12
+difficulty: "boss"
+estMinutes: 40
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 5
+objectives:
+  - Draw gateway + auth + observability for HTTP MCP
+  - Explain token efficiency tradeoffs for large tool catalogs
+  - Plan safe rollout for tool versioning
+diagrams:
+  - "production-topology"
+quiz:
+  - q: "HTTP MCP in production should usually sit behind…"
+    options:
+      - "Nothing, vibes only"
+      - "Auth gateway + WAF/rate limits + observability"
+      - "FTP bounce"
+      - "ICMP tunnel"
+    answer: 1
+    explain: "Treat like any other HTTP service surface."
+  - q: "Huge tool lists hurt because…"
+    options:
+      - "Models pay context for metadata"
+      - "They make fonts bigger"
+      - "They disable TLS"
+      - "They require IPv6"
+    answer: 0
+    explain: "Catalog size impacts tokens and selection errors."
+  - q: "Versioning tools safely usually means…"
+    options:
+      - "Dual-register during migrations"
+      - "Renaming tools weekly"
+      - "Deleting logs"
+      - "Disabling schemas"
+    answer: 0
+    explain: "Provide overlap windows and explicit deprecation paths."
+references:
+  - label: "MCP Transports"
+    url: "https://modelcontextprotocol.io/docs/concepts/transports"
+---
+
+## The setup
+
+Production is **policy + observability + rollback**, not “we deployed a binary.”
+
+## Picture this
+
+<Diagram id="production-topology" caption="LB → MCP HTTP servers → authZ → backends; sidecar logs/metrics." alt="Production topology diagram">
+
+{`flowchart LR
+  lb[Load_balancer]
+  mcp[MCP_HTTP_servers]
+  auth[AuthZ_layer]
+  svc[Internal_services]
+  obs[Observability]
+  lb --> mcp
+  mcp --> auth
+  auth --> svc
+  mcp -.metrics_logs.-> obs`}
+
+</Diagram>
+
+## Mental model
+
+Your MCP layer is an **API gateway** with extra philosophical problems.
+
+## Walkthrough
+
+- Centralize auth; propagate identity on tool calls.
+- Emit structured audit logs for mutating tools.
+- Version tools; deprecate with dual-registration windows when needed.
+
+## Hall of Shame
+
+<HallOfShame tag="operations" title="No rollback plan">
+
+```txt
+"We shipped new tool semantics Friday 5pm."
+```
+
+**Fix:** progressive rollout, shadow mode, feature flags.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Models amplify mistakes. Production patterns exist to **slow mistakes down**.
+
+## Mini challenge
+
+Define SLOs for MCP endpoints: availability, p95 latency, error budget.
+
+## Reflection
+
+What’s your “break glass” path when a tool is actively harmful mid-incident?
+
+## You can now brag that…
+
+You can draw a production diagram that would make SREs nod instead of sob.

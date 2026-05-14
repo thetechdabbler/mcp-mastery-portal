@@ -1,0 +1,104 @@
+---
+slug: "13-enterprise-governance"
+title: "Enterprise Governance — Catalogs, Policy, and Incident Angst"
+subtitle: "If your governance is a wiki page, attackers thank you for the single pane of glass."
+order: 13
+difficulty: "boss"
+estMinutes: 38
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 5
+objectives:
+  - Design an MCP server catalog with owners and risk tiers
+  - Map policy checks to host and gateway layers
+  - Tie audit logs to incident response workflows
+diagrams:
+  - "governance-layers"
+quiz:
+  - q: "An MCP catalog should include at minimum…"
+    options:
+      - "Only GitHub stars"
+      - "Owner, data classes, risk tier, last review date"
+      - "Only Docker base image"
+      - "Only README length"
+    answer: 1
+    explain: "Operational metadata drives approvals and audits."
+  - q: "Policy engines should see…"
+    options:
+      - "Only stdout"
+      - "Tool args, identities, and server provenance"
+      - "Only model temperature"
+      - "Only CSS"
+    answer: 1
+    explain: "Decisions need context: who, what, where from."
+  - q: "Third-party MCP servers should be treated like…"
+    options:
+      - "Dependencies with supply-chain risk"
+      - "Inline CSS"
+      - "Non-executable documentation"
+      - "Kernel modules you can trust blindly"
+    answer: 0
+    explain: "Pin, review, and allowlist like any other deployed package."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+Enterprises don’t fear MCP—they fear **unowned tools** with **data exfil** superpowers.
+
+## Picture this
+
+<Diagram id="governance-layers" caption="Catalog → policy engine → audit → incident loop." alt="Governance layers diagram">
+
+{`flowchart LR
+  cat[Server_catalog]
+  pol[Policy_engine]
+  aud[Audit_store]
+  inc[Incident_response]
+  cat --> pol
+  pol --> aud
+  aud --> inc
+  inc --> cat`}
+
+</Diagram>
+
+## Mental model
+
+Governance is **continuous**, not a checkbox before launch.
+
+## Walkthrough
+
+- Risk-tier servers: dev vs prod vs regulated data.
+- Mandatory reviewers for tool schema changes.
+- Automated checks: secret patterns, network egress, filesystem scope.
+
+## Hall of Shame
+
+<HallOfShame tag="governance" title="Rubber-stamp PR">
+
+```txt
+"+420 tools lgtm"
+```
+
+**Fix:** require justification, owner, blast radius, and rollback.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Regulators don’t care that “the model did it.” They care what **your controls** were.
+
+## Mini challenge
+
+Draft a governance checklist for approving a new third-party MCP server.
+
+## Reflection
+
+Which team owns MCP catalog entries when engineering rotates?
+
+## You can now brag that…
+
+You can say “data classification” in the same sentence as “stdio” without blacking out.

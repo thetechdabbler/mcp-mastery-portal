@@ -1,0 +1,104 @@
+---
+slug: "07-streamable-http"
+title: "Streamable HTTP — Remote MCP Without Pretending It's 2015"
+subtitle: "HTTP+SSE walked so Streamable HTTP could run. You still have to validate Origin."
+order: 7
+difficulty: "mid"
+estMinutes: 32
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Contrast Streamable HTTP with legacy HTTP+SSE transport
+  - Explain session and streaming considerations
+  - Name baseline HTTP security controls (Origin, localhost binding, auth)
+diagrams:
+  - "streamable-http-vs-sse"
+quiz:
+  - q: "Streamable HTTP primarily targets…"
+    options:
+      - "Only gRPC clients"
+      - "Networked deployments with HTTP semantics"
+      - "GPU shader uploads"
+      - "FTP mirrors"
+    answer: 1
+    explain: "HTTP transport is for remote/multi-tenant style deployments."
+  - q: "Why should servers validate Origin on HTTP MCP?"
+    options:
+      - "DNS rebinding class risks"
+      - "Because JSON is heavier than XML"
+      - "To speed up DNS"
+      - "Because browsers love cookies"
+    answer: 0
+    explain: "The spec calls out Origin validation as a security requirement."
+  - q: "Local dev servers should bind to…"
+    options:
+      - "0.0.0.0 by default"
+      - "localhost when possible"
+      - "A random RFC1918 /16"
+      - "Multicast only"
+    answer: 1
+    explain: "Binding narrowly reduces accidental exposure."
+references:
+  - label: "MCP Transports"
+    url: "https://modelcontextprotocol.io/docs/concepts/transports"
+---
+
+## The setup
+
+Remote MCP needs HTTP semantics, streaming, and **adult supervision** for auth and SSRF-class issues.
+
+## Picture this
+
+<Diagram id="streamable-http-vs-sse" caption="Legacy HTTP+SSE vs Streamable HTTP (conceptual migration)." alt="Two small flowcharts comparing transports">
+
+{`flowchart LR
+  subgraph legacy [HTTP_plus_SSE_legacy]
+    L1[Client] -->|SSE stream| L2[Server]
+    L1 -->|HTTP POST| L2
+  end
+  subgraph modern [Streamable_HTTP]
+    M1[Client] -->|POST_JSON-RPC| M2[Server]
+    M2 -->|optional_stream| M1
+  end`}
+
+</Diagram>
+
+## Mental model
+
+Think “**stateless-ish HTTP** + optional streaming,” not “raw websocket vibes.”
+
+## Walkthrough
+
+- Bind local dev servers to **localhost** when possible.
+- Treat auth like any other HTTP service: tokens, mTLS, gateways.
+- Session headers (e.g. standardized MCP headers) help proxies route without deep inspection.
+
+## Hall of Shame
+
+<HallOfShame tag="transport" title="Public bind 0.0.0.0">
+
+```txt
+"Listen on all interfaces so it's easy to demo."
+```
+
+**Fix:** default localhost; put auth in front for remote.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Your MCP HTTP endpoint is just another **outbound-controlled service**—WAFs, rate limits, and audit trails apply.
+
+## Mini challenge
+
+Write a 5-bullet “HTTP MCP launch checklist” for your platform team.
+
+## Reflection
+
+Where would SSE remnants still leak into your architecture?
+
+## You can now brag that…
+
+You can explain why Streamable HTTP exists without muttering “vendor drama” (even if you’re thinking it).

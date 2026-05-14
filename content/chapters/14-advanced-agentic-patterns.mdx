@@ -1,0 +1,103 @@
+---
+slug: "14-advanced-agentic-patterns"
+title: "Advanced Agentic Patterns — Multi-Server, Dynamic Tools, and Humble Doubt"
+subtitle: "Dynamic tool loading: powerful, spicy, and not your first date."
+order: 14
+difficulty: "nightmare"
+estMinutes: 42
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 6
+objectives:
+  - Compose multiple MCP servers with explicit trust tiers
+  - Evaluate dynamic tool loading tradeoffs
+  - Design guardrails for agent loops calling tools
+diagrams:
+  - "multi-server-workflow"
+quiz:
+  - q: "Multi-server setups increase which risk most?"
+    options:
+      - "Schema confusion and cross-tool laundering"
+      - "Keyboard latency"
+      - "Monitor refresh rate"
+      - "Git commit hash length"
+    answer: 0
+    explain: "More servers means more metadata and more tool selection ambiguity."
+  - q: "Dynamic tool loading should be paired with…"
+    options:
+      - "Less logging"
+      - "Strong policy + auditing + user-visible disclosure"
+      - "Longer prompts only"
+      - "FTP"
+    answer: 1
+    explain: "Dynamic surfaces expand attack and misuse paths."
+  - q: "A practical loop budget should cap…"
+    options:
+      - "Steps, wall time, and tool spend"
+      - "Only font size"
+      - "Only RAM RGB"
+      - "Only emoji count"
+    answer: 0
+    explain: "Agents need deterministic stop conditions."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+Agentic workflows are **graphs** of decisions. MCP servers are **nodes**. If you don’t label edges with trust, the graph eats you.
+
+## Picture this
+
+<Diagram id="multi-server-workflow" caption="Host orchestrates multiple servers with trust tiers." alt="Multi server orchestration diagram">
+
+{`flowchart TB
+  host[Host_orchestrator]
+  s1[Server_readonly_tier]
+  s2[Server_mutate_tier]
+  s3[Server_breakglass]
+  host --> s1
+  host --> s2
+  host -.rare.-> s3`}
+
+</Diagram>
+
+## Mental model
+
+Treat orchestration like **service mesh routing**: identities, policies, budgets, and kill switches.
+
+## Walkthrough
+
+- Keep “planner tools” separate from “executor tools” where possible.
+- Cap loops: max steps, max wall time, max spend.
+- Prefer explicit user intent for high-risk transitions.
+
+## Hall of Shame
+
+<HallOfShame tag="agents" title="Unbounded loops">
+
+```txt
+while true: call_tools_until_happy()
+```
+
+**Fix:** budgets, checkpoints, and deterministic stop conditions.
+
+</HallOfShame>
+
+## Why this matters in production
+
+Agents fail open. Production systems fail **closed**.
+
+## Mini challenge
+
+Design a two-tier tool system: “planner-safe” vs “needs ticket id”.
+
+## Reflection
+
+Where would you refuse multi-server composition entirely?
+
+## You can now brag that…
+
+You can say “orchestration” without implying you’ve solved alignment (humility: rare, attractive).

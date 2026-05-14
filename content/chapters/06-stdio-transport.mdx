@@ -1,0 +1,100 @@
+---
+slug: "06-stdio-transport"
+title: "stdio Transport — Local Power, Local Risk"
+subtitle: "Your server inherits your user. Act like it."
+order: 6
+difficulty: "mid"
+estMinutes: 26
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 4
+objectives:
+  - Explain how hosts spawn stdio servers
+  - Identify stdout vs stderr responsibilities
+  - Describe ambient authority risks
+diagrams:
+  - "stdio-process-tree"
+quiz:
+  - q: "stdio MCP servers usually run as…"
+    options:
+      - "A different cloud tenant"
+      - "The same OS user as the host process"
+      - "Kernel ring 0"
+      - "WASM only"
+    answer: 1
+    explain: "Child processes inherit credentials from the parent host."
+  - q: "Debug logs should go to…"
+    options:
+      - "stdout"
+      - "stderr"
+      - "/dev/random"
+      - "Slack only"
+    answer: 1
+    explain: "stdout is reserved for JSON-RPC framing."
+  - q: "Ambient authority means your tools can…"
+    options:
+      - "Access everything the host user can unless you add boundaries"
+      - "Only access GPUs"
+      - "Bypass DNS"
+      - "Ignore JSON-RPC"
+    answer: 0
+    explain: "stdio servers inherit the host user's filesystem and network identity."
+references:
+  - label: "MCP Transports"
+    url: "https://modelcontextprotocol.io/docs/concepts/transports"
+---
+
+## The setup
+
+**stdio** is the default local integration: fast, simple, and **dangerously intimate** with your user account.
+
+## Picture this
+
+<Diagram id="stdio-process-tree" caption="Host spawns server child; pipes connect stdin/stdout; stderr for logs." alt="Process tree diagram host child stdio pipes">
+
+{`flowchart TB
+  host[Host_process] -->|spawn| child[MCP_server_child]
+  host -->|stdin pipe| child
+  child -->|stdout pipe JSON-RPC| host
+  child -.stderr logs.-> logs[Developer_console]`}
+
+</Diagram>
+
+## Mental model
+
+stdio is not “secure because local.” It’s **local therefore powerful**—treat tool handlers like setuid scripts.
+
+## Walkthrough
+
+- Host sets environment, cwd, and args.
+- Server must never leak secrets into structured tool results accidentally.
+- Restart storms happen—make initialization cheap.
+
+## Hall of Shame
+
+<HallOfShame tag="secrets" title="Dotenv in tools">
+
+```ts
+tool("env_dump", {}, async () => ({ content: [{ type: "text", text: JSON.stringify(process.env) }] }));
+```
+
+**Fix:** never expose environment wholesale; allowlist config keys.
+
+</HallOfShame>
+
+## Why this matters in production
+
+“Local” attackers include **compromised models**, **prompt injection**, and **buggy hosts**. stdio removes network latency—not threat actors.
+
+## Mini challenge
+
+Enumerate three files your accidental “read_file” tool could exfiltrate—now add an allowlist.
+
+## Reflection
+
+When would you refuse stdio entirely for a given capability?
+
+## You can now brag that…
+
+You can explain ambient authority without sounding like you’re auditioning for InfoSec TikTok.

@@ -1,0 +1,10 @@
+{
+  "slug": "calculator-tool",
+  "title": "Calculator MCP Tool",
+  "difficulty": "warmup",
+  "estMinutes": 25,
+  "packageDir": "c-01-calculator-tool",
+  "summary": "Implement an add tool with numeric schema and passing validation.",
+  "hints": ["Use z.number()", "Return structured text content"],
+  "acceptance": ["tools/list includes add", "add(2,3) returns 5"]
+}

@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-background: #fafafa;
+  --color-foreground: #09090b;
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #fafafa;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
+  --color-ring: #18181b;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: #09090b;
+    --color-foreground: #fafafa;
+    --color-primary: #fafafa;
+    --color-primary-foreground: #18181b;
+    --color-muted: #27272a;
+    --color-muted-foreground: #a1a1aa;
+    --color-border: #27272a;
+    --color-input: #27272a;
+    --color-card: #09090b;
+    --color-card-foreground: #fafafa;
+    --color-accent: #27272a;
+    --color-accent-foreground: #fafafa;
+    --color-secondary: #27272a;
+    --color-secondary-foreground: #fafafa;
+    --color-ring: #d4d4d8;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  .prose .anchor-link {
+    @apply no-underline;
+  }
+}
+
+@layer components {
+  /* Make sure markdown tables (rendered via MdxTable wrapper or any raw <table>)
+     are readable in both light and dark modes, with visible borders and a
+     header row that stands out. Works inside or outside .prose. */
+  .mdx-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .mdx-table thead {
+    background-color: var(--color-muted);
+  }
+  .mdx-table th,
+  .mdx-table td {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    color: var(--color-foreground);
+  }
+  .mdx-table th {
+    font-weight: 600;
+    color: var(--color-foreground);
+    white-space: nowrap;
+  }
+  .mdx-table tbody tr:nth-child(even) {
+    background-color: color-mix(in oklab, var(--color-muted) 40%, transparent);
+  }
+
+  /* Defensive styling for any unwrapped tables that slip through (e.g. raw
+     HTML tables in MDX). Keeps them visible even without the wrapper. */
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .prose table thead th {
+    background-color: var(--color-muted);
+  }
+}

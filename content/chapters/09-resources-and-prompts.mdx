@@ -1,0 +1,101 @@
+---
+slug: "09-resources-and-prompts"
+title: "Resources & Prompts — Reads and Recipes"
+subtitle: "Resources are nouns. Prompts are playbooks. Tools are where things catch fire."
+order: 9
+difficulty: "mid"
+estMinutes: 30
+specVersion: "2025-11-25"
+sdkVersion: "^1.29"
+lastReviewed: "2026-05-14"
+mistakesPrevented: 3
+objectives:
+  - Model resource templates and subscriptions
+  - Design prompts with explicit arguments
+  - Avoid duplicating resource reads as tools
+diagrams:
+  - "resource-discovery-seq"
+quiz:
+  - q: "Resources excel at…"
+    options:
+      - "Deleting rows"
+      - "Stable reads with URIs"
+      - "Shell access"
+      - "Kernel modules"
+    answer: 1
+    explain: "Resources represent readable addressable content."
+  - q: "Prompt arguments should be…"
+    options:
+      - "Free-form strings only"
+      - "Explicitly typed and validated like tool args"
+      - "Binary blobs"
+      - "Optional always"
+    answer: 1
+    explain: "Prompt args are still part of your contract surface."
+  - q: "URI templates are useful when…"
+    options:
+      - "Resources need parameterized reads"
+      - "You need raw UDP"
+      - "You want to hide schemas"
+      - "You compile kernels"
+    answer: 0
+    explain: "Templates expose stable patterns for read-only slices."
+references:
+  - label: "MCP Spec 2025-11-25"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+---
+
+## The setup
+
+Resources and prompts are where teams **accidentally** rebuild shadow APIs—keep them narrow.
+
+## Picture this
+
+<Diagram id="resource-discovery-seq" caption="Client lists resources, reads URI, may subscribe to changes." alt="Sequence diagram resource list read subscribe">
+
+{`sequenceDiagram
+  participant Client
+  participant Server
+  Client->>Server: resources/list
+  Server-->>Client: uris_and_metadata
+  Client->>Server: resources/read
+  Server-->>Client: contents`}
+
+</Diagram>
+
+## Mental model
+
+**Resources** answer “what exists to read?” **Prompts** answer “what instruction recipe should we apply?”
+
+## Walkthrough
+
+- Use URI templates for parameterized reads.
+- Treat prompt bodies like **versioned code**—review changes.
+
+## Hall of Shame
+
+<HallOfShame tag="design" title="Tool-shaped reads">
+
+```txt
+tool("get_doc", { id: z.string() }, ...)
+```
+
+**Fix:** prefer `docs://{id}` resource unless reads must be side-effecting (they shouldn’t).
+
+</HallOfShame>
+
+## Why this matters in production
+
+Resources are easier to cache, scan, and ACL than tools—use that.
+
+## Mini challenge
+
+Pick one read tool and convert it to a resource—what auth checks move where?
+
+## Reflection
+
+Which prompts in your org should require human approval to **publish**, not just to run?
+
+## You can now brag that…
+
+You can explain why your docs are resources without sounding like you reinvented HTTP GET (even if you kinda did, but politely).

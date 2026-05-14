@@ -1,0 +1,10 @@
+{
+  "slug": "prevent-path-traversal",
+  "title": "Prevent Path Traversal",
+  "difficulty": "boss",
+  "estMinutes": 45,
+  "packageDir": "c-08-prevent-path-traversal",
+  "summary": "Reject ../ and absolute paths outside allowlist.",
+  "hints": ["path.resolve + root check"],
+  "acceptance": ["traversal payload rejected"]
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "audit-log-middleware",
+  "title": "Add Audit Logs",
+  "difficulty": "boss",
+  "estMinutes": 50,
+  "packageDir": "c-07-audit-log-middleware",
+  "summary": "Emit structured audit lines to stderr for each tool call.",
+  "hints": ["Use JSON lines", "Redact secrets"],
+  "acceptance": ["audit line contains tool name"]
+}
