@@ -11,5 +11,5 @@ flowchart LR
 ```
 
 - **Rendering**: `next-mdx-remote/rsc` + remark/rehype plugins (GFM, glossary autolink, slug, autolink headings).
-- **Diagrams**: client-side Mermaid via `components/mdx/diagram.tsx`.
+- **Diagrams**: D2 sources in `content/diagrams/` compiled to `public/diagrams/*.svg` by `npm run diagrams`; `<Diagram />` in MDX inlines the SVG at render time (`components/mdx/diagram.tsx`).
 - **Search**: dev substring API + optional Pagefind postbuild for static HTML exports.

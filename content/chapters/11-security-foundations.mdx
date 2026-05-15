@@ -55,44 +55,11 @@ MCP doesn’t remove attackers—it **organizes** where they show up: descriptio
 
 ## Picture this
 
-<Diagram id="threat-model-overview" caption="Trust boundaries: model, host policy, client protocol, server, downstream systems." alt="Trust boundary diagram">
+<Diagram id="threat-model-overview" caption="Trust boundaries: model, host policy, client protocol, server, downstream systems." alt="Trust boundary diagram" />
 
-{`flowchart TB
-  model[Model]
-  host[Host_policy]
-  client[MCP_client]
-  server[MCP_server]
-  data[Downstream_systems]
-  model <--> host
-  host <--> client
-  client <--> server
-  server <--> data`}
+<Diagram id="tool-poisoning-flow" caption="Poisoned description/metadata enters host context without invoking the tool." alt="Sequence diagram tool poisoning" />
 
-</Diagram>
-
-<Diagram id="tool-poisoning-flow" caption="Poisoned description/metadata enters host context without invoking the tool." alt="Sequence diagram tool poisoning">
-
-{`sequenceDiagram
-  participant Server
-  participant Client
-  participant Model
-  Server-->>Client: tools/list_metadata
-  Client-->>Model: metadata_in_context
-  Note over Model: Instructions_in_description_mislead_planner`}
-
-</Diagram>
-
-<Diagram id="cross-tool-laundering" caption="Low-trust tool output becomes high-trust input to another tool." alt="Sequence cross tool laundering">
-
-{`sequenceDiagram
-  participant Model
-  participant T1 as Low_trust_tool
-  participant T2 as High_privilege_tool
-  Model->>T1: call
-  T1-->>Model: attacker_text
-  Model->>T2: passes_text_as_args`}
-
-</Diagram>
+<Diagram id="cross-tool-laundering" caption="Low-trust tool output becomes high-trust input to another tool." alt="Sequence cross tool laundering" />
 
 ## Mental model
 

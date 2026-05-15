@@ -1,0 +1,10 @@
+direction: right
+
+inp: Input path { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/folder-open.svg }
+norm: Normalize and check root { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/adjustments-horizontal.svg }
+deny: Reject { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/x-circle.svg }
+read: Read { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/check-circle.svg }
+
+inp -> norm
+norm -> deny: fail
+norm -> read: ok

@@ -51,20 +51,7 @@ Production is **policy + observability + rollback**, not “we deployed a binary
 
 ## Picture this
 
-<Diagram id="production-topology" caption="LB → MCP HTTP servers → authZ → backends; sidecar logs/metrics." alt="Production topology diagram">
-
-{`flowchart LR
-  lb[Load_balancer]
-  mcp[MCP_HTTP_servers]
-  auth[AuthZ_layer]
-  svc[Internal_services]
-  obs[Observability]
-  lb --> mcp
-  mcp --> auth
-  auth --> svc
-  mcp -.metrics_logs.-> obs`}
-
-</Diagram>
+<Diagram id="production-topology" caption="LB → MCP HTTP servers → authZ → backends; sidecar logs/metrics." alt="Production topology diagram" />
 
 ## Mental model
 

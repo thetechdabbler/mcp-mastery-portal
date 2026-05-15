@@ -61,6 +61,8 @@
   .mdx-table {
     border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;
+    word-break: break-word;
   }
   .mdx-table thead {
     background-color: var(--color-muted);
@@ -68,7 +70,7 @@
   .mdx-table th,
   .mdx-table td {
     border: 1px solid var(--color-border);
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 1.25rem;
     text-align: left;
     vertical-align: top;
     color: var(--color-foreground);
@@ -82,14 +84,13 @@
     background-color: color-mix(in oklab, var(--color-muted) 40%, transparent);
   }
 
-  /* Defensive styling for any unwrapped tables that slip through (e.g. raw
-     HTML tables in MDX). Keeps them visible even without the wrapper. */
-  .prose table {
+  /* Defensive styling for raw HTML tables in MDX that bypass the MdxTable wrapper. */
+  .prose table:not(.mdx-table) {
     display: block;
     overflow-x: auto;
     max-width: 100%;
   }
-  .prose table thead th {
+  .prose table:not(.mdx-table) thead th {
     background-color: var(--color-muted);
   }
 }

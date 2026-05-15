@@ -1,0 +1,27 @@
+// Icons: Heroicons outline via jsDelivr (palette: scripts/diagram-icon-urls.mjs)
+direction: right
+
+before: Before MCP {
+  h1: Host A { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg }
+  h2: Host B { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/user-circle.svg }
+  b1: Backend 1 { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/building-office-2.svg }
+  b2: Backend 2 { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/circle-stack.svg }
+  b3: Backend 3 { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cube-transparent.svg }
+
+  h1 -> b1
+  h1 -> b2
+  h2 -> b1
+  h2 -> b3
+}
+
+after: With MCP {
+  h3: Host { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg }
+  c: MCP client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+  s1: Server 1 { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  s2: Server 2 { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+
+  h3 -> c -> s1
+  c -> s2
+}
+
+before -> after: evolves to { style.stroke-dash: 5 }

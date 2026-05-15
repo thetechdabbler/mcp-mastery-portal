@@ -51,19 +51,7 @@ Remote MCP needs HTTP semantics, streaming, and **adult supervision** for auth a
 
 ## Picture this
 
-<Diagram id="streamable-http-vs-sse" caption="Legacy HTTP+SSE vs Streamable HTTP (conceptual migration)." alt="Two small flowcharts comparing transports">
-
-{`flowchart LR
-  subgraph legacy [HTTP_plus_SSE_legacy]
-    L1[Client] -->|SSE stream| L2[Server]
-    L1 -->|HTTP POST| L2
-  end
-  subgraph modern [Streamable_HTTP]
-    M1[Client] -->|POST_JSON-RPC| M2[Server]
-    M2 -->|optional_stream| M1
-  end`}
-
-</Diagram>
+<Diagram id="streamable-http-vs-sse" caption="Legacy HTTP+SSE vs Streamable HTTP (conceptual migration)." alt="Two small flowcharts comparing transports" />
 
 ## Mental model
 

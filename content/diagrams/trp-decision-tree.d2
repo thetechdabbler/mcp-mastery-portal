@@ -1,0 +1,14 @@
+direction: down
+
+start: Need capability { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/question-mark-circle.svg }
+side: Side effects or mutations { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/bolt.svg }
+uri: Stable URI read { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/link.svg }
+tool: Tool with schema { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/wrench-screwdriver.svg }
+res: Resource { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/document-text.svg }
+prompt: Prompt template { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/chat-bubble-left-right.svg }
+
+start -> side
+side -> tool: yes
+side -> uri: no
+uri -> res: yes
+uri -> prompt: no

@@ -4,13 +4,7 @@ title: "Security Playbook"
 
 ## Threat: tool poisoning via descriptions
 
-<Diagram id="sec-poison" caption="Poisoned metadata flows into planner context." alt="Attack flow diagram">
-
-{`flowchart LR
-  srv[Malicious_server] --> meta[Tool_metadata]
-  meta --> model[Model_planner]`}
-
-</Diagram>
+<Diagram id="sec-poison" caption="Poisoned metadata flows into planner context." alt="Attack flow diagram" />
 
 ### Mitigation
 
@@ -18,14 +12,7 @@ Allowlist servers, review diffs, separate trust tiers, strip or summarize tool m
 
 ## Threat: path traversal in tools
 
-<Diagram id="sec-path" caption="User/model input reaches filesystem without jail." alt="Path traversal flow">
-
-{`flowchart TB
-  in[Input_path] --> norm[Normalize_and_check_root]
-  norm -->|fail| deny[Reject]
-  norm -->|ok| read[Read]`}
-
-</Diagram>
+<Diagram id="sec-path" caption="User/model input reaches filesystem without jail." alt="Path traversal flow" />
 
 ### Mitigation
 

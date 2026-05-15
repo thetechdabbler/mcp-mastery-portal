@@ -1,0 +1,17 @@
+direction: right
+
+legacy: HTTP plus SSE legacy {
+  l1: Client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/signal.svg }
+  l2: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  l1 -> l2: SSE stream { style.stroke-dash: 5 }
+  l1 -> l2: HTTP POST
+}
+
+modern: Streamable HTTP {
+  m1: Client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/globe-alt.svg }
+  m2: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  m1 -> m2: POST JSON-RPC
+  m2 -> m1: optional stream { style.stroke-dash: 5 }
+}
+
+legacy -> modern: migration

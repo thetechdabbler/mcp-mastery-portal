@@ -1,0 +1,8 @@
+first: {
+  shape: sequence_diagram
+  host: Host { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg }
+  server: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  host -> server: JSON-RPC request via stdin
+  server -> server: validate schema
+  server -> host: JSON-RPC response via stdout
+}

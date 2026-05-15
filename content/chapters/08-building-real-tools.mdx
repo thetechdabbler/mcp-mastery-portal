@@ -51,17 +51,7 @@ references:
 
 ## Picture this
 
-<Diagram id="tool-cancel-progress" caption="Long tool: client may cancel; server can emit progress notifications." alt="Sequence diagram tool call cancel progress">
-
-{`sequenceDiagram
-  participant Client
-  participant Server
-  Client->>Server: tools/call
-  Server-->>Client: notifications/progress
-  Client->>Server: cancel_signal
-  Server-->>Client: partial_or_error_result`}
-
-</Diagram>
+<Diagram id="tool-cancel-progress" caption="Long tool: client may cancel; server can emit progress notifications." alt="Sequence diagram tool call cancel progress" />
 
 ## Mental model
 

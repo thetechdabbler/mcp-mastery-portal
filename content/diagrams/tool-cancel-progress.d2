@@ -1,0 +1,9 @@
+tool_cancel: {
+  shape: sequence_diagram
+  client: Client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+  server: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  client -> server: tools/call
+  server -> client: notifications/progress
+  client -> server: cancel signal
+  server -> client: partial or error result
+}

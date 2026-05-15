@@ -51,17 +51,7 @@ Resources and prompts are where teams **accidentally** rebuild shadow APIs—kee
 
 ## Picture this
 
-<Diagram id="resource-discovery-seq" caption="Client lists resources, reads URI, may subscribe to changes." alt="Sequence diagram resource list read subscribe">
-
-{`sequenceDiagram
-  participant Client
-  participant Server
-  Client->>Server: resources/list
-  Server-->>Client: uris_and_metadata
-  Client->>Server: resources/read
-  Server-->>Client: contents`}
-
-</Diagram>
+<Diagram id="resource-discovery-seq" caption="Client lists resources, reads URI, may subscribe to changes." alt="Sequence diagram resource list read subscribe" />
 
 ## Mental model
 

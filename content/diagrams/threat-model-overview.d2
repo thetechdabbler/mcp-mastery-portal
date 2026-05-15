@@ -1,0 +1,12 @@
+direction: down
+
+model: Model { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cpu-chip.svg }
+host: Host policy { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/shield-check.svg }
+client: MCP client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+server: MCP server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+data: Downstream systems { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/circle-stack.svg }
+
+model <-> host
+host <-> client
+client <-> server
+server <-> data

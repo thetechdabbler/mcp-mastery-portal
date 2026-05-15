@@ -1,0 +1,10 @@
+direction: down
+
+host: Host process { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg }
+child: MCP server child { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+logs: Developer console stderr { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/command-line.svg }
+
+host -> child: spawn
+host -> child: stdin pipe JSON-RPC { style.stroke-dash: 5 }
+child -> host: stdout pipe JSON-RPC
+child -> logs: stderr logs { style.stroke-dash: 5 }

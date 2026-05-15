@@ -1,0 +1,17 @@
+direction: right
+
+host: Host {
+  icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg
+
+  ui: UI { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/squares-2x2.svg }
+  model_runtime: Model runtime { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cpu-chip.svg }
+  mcp_client: MCP client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+
+  ui -> model_runtime -> mcp_client
+}
+
+srv_a: Server A { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+srv_b: Server B { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cube-transparent.svg }
+
+host.mcp_client -> srv_a: JSON-RPC
+host.mcp_client -> srv_b: JSON-RPC

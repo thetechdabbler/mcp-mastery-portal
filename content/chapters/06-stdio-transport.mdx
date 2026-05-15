@@ -51,15 +51,7 @@ references:
 
 ## Picture this
 
-<Diagram id="stdio-process-tree" caption="Host spawns server child; pipes connect stdin/stdout; stderr for logs." alt="Process tree diagram host child stdio pipes">
-
-{`flowchart TB
-  host[Host_process] -->|spawn| child[MCP_server_child]
-  host -->|stdin pipe| child
-  child -->|stdout pipe JSON-RPC| host
-  child -.stderr logs.-> logs[Developer_console]`}
-
-</Diagram>
+<Diagram id="stdio-process-tree" caption="Host spawns server child; pipes connect stdin/stdout; stderr for logs." alt="Process tree diagram host child stdio pipes" />
 
 ## Mental model
 

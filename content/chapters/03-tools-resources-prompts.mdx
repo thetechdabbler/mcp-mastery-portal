@@ -51,16 +51,7 @@ Primitives are boring until they’re wrong—then they’re **incidents**.
 
 ## Picture this
 
-<Diagram id="trp-decision-tree" caption="Decision tree: side effects? choose tool. stable read URI? resource. repeatable instruction? prompt." alt="Mermaid flowchart for tool resource prompt selection">
-
-{`flowchart TD
-  start[Need_capability] --> side[Side_effects_or_mutations]
-  side -->|yes| tool[Tool_with_schema]
-  side -->|no| uri[Stable_URI_read]
-  uri -->|yes| res[Resource]
-  uri -->|no| prompt[Prompt_template]`}
-
-</Diagram>
+<Diagram id="trp-decision-tree" caption="Decision tree: side effects? choose tool. stable read URI? resource. repeatable instruction? prompt." alt="Decision tree for choosing tool, resource, or prompt" />
 
 ## Mental model
 

@@ -51,23 +51,7 @@ The capstone is a **mini production system**: read surfaces, prompt templates, s
 
 ## Picture this
 
-<Diagram id="capstone-architecture" caption="Capstone: read resources, tools, approval queue, hash-chained audit log." alt="Capstone architecture diagram">
-
-{`flowchart TB
-  subgraph reads [Read_plane]
-    code[code_search_resource]
-    docs[docs_resource]
-  end
-  subgraph writes [Write_plane]
-    approve[Approval_queue]
-    write[write_file_tool]
-  end
-  audit[Audit_JSONL_hash_chain]
-  reads --> audit
-  writes --> audit
-  approve --> write`}
-
-</Diagram>
+<Diagram id="capstone-architecture" caption="Capstone: read resources, tools, approval queue, hash-chained audit log." alt="Capstone architecture diagram" />
 
 ## Mental model
 

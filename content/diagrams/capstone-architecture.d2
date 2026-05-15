@@ -1,0 +1,17 @@
+direction: down
+
+reads: Read_plane {
+  code: Code search resource { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/code-bracket-square.svg }
+  docs: Docs resource { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/document-duplicate.svg }
+}
+
+writes: Write_plane {
+  approve: Approval queue { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/clipboard-document-check.svg }
+  write: Write file tool { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/pencil-square.svg }
+}
+
+audit: Audit JSONL hash chain { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/clipboard-document-list.svg }
+
+reads -> audit
+writes -> audit
+writes.approve -> writes.write

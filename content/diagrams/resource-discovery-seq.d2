@@ -1,0 +1,9 @@
+res_seq: {
+  shape: sequence_diagram
+  client: Client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+  server: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  client -> server: resources/list
+  server -> client: URIs and metadata
+  client -> server: resources/read
+  server -> client: contents
+}

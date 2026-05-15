@@ -1,0 +1,10 @@
+direction: right
+
+lb: Load balancer { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-pointing-out.svg }
+mcp: MCP HTTP servers { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+auth: AuthZ layer { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/lock-closed.svg }
+svc: Internal services { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/building-office-2.svg }
+obs: Observability { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/chart-bar-square.svg }
+
+lb -> mcp -> auth -> svc
+mcp -> obs: metrics and logs { style.stroke-dash: 5 }

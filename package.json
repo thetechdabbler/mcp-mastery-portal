@@ -8,6 +8,9 @@
     "packages/*"
   ],
   "scripts": {
+    "diagrams": "node scripts/render-diagrams.mjs",
+    "predev": "node scripts/render-diagrams.mjs",
+    "prebuild": "node scripts/render-diagrams.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -31,7 +34,6 @@
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.511.0",
-    "mermaid": "^11.6.0",
     "next": "^15.3.2",
     "next-mdx-remote": "^5.0.0",
     "react": "^19.1.0",

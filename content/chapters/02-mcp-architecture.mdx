@@ -51,20 +51,7 @@ If you blur **host**, **client**, and **server**, you’ll design “helpful” 
 
 ## Picture this
 
-<Diagram id="host-client-server-topology" caption="Host embeds model + UI; client multiplexes JSON-RPC; servers expose capabilities." alt="Diagram with host containing client connected to two MCP servers">
-
-{`flowchart TB
-  subgraph host [Host_app]
-    UI[UI]
-    MODEL[Model_runtime]
-    CLIENT[MCP_client]
-    UI --> MODEL
-    MODEL --> CLIENT
-  end
-  CLIENT --> S1[Server_A]
-  CLIENT --> S2[Server_B]`}
-
-</Diagram>
+<Diagram id="host-client-server-topology" caption="Host embeds model + UI; client multiplexes JSON-RPC; servers expose capabilities." alt="Diagram with host containing client connected to two MCP servers" />
 
 ## Mental model
 

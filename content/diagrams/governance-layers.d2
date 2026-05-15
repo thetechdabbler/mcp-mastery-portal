@@ -1,0 +1,11 @@
+direction: right
+
+cat: Server catalog { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/rectangle-group.svg }
+pol: Policy engine { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/shield-check.svg }
+aud: Audit store { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/clipboard-document-list.svg }
+inc: Incident response { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/exclamation-triangle.svg }
+
+cat -> pol
+pol -> aud
+aud -> inc
+inc -> cat: tighten catalog

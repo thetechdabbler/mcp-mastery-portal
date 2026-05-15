@@ -1,0 +1,20 @@
+---
+description: Diagram authoring conventions (D2 over Mermaid)
+alwaysApply: true
+---
+
+# Diagrams: prefer D2
+
+- Default to **D2** for new diagrams in plans, docs, or MDX in this repo.
+- Sources live in `content/diagrams/<id>.d2`; run `npm run diagrams` (or rely on `predev` / `prebuild`) to emit `public/diagrams/<id>.svg` via `scripts/render-diagrams.mjs`.
+- Repo-wide defaults (rounded corners, etc.): edit `DIAGRAM_STYLE_PRELUDE` in `scripts/render-diagrams.mjs` (D2 triple-glob `***`), then `npm run diagrams`.
+- In MDX use a **self-closing** tag only: `<Diagram id="<id>" caption="..." alt="..." />` — do not inline diagram source in MDX.
+- **Mermaid (chat only)**: use Mermaid only when something must render **inline in Cursor chat** (chat supports Mermaid, not D2). Never commit Mermaid diagram blocks into repo MDX or `docs/`—use D2 + `<Diagram />` instead.
+- Diagram `id` values are **kebab-case** and **globally unique** across chapters and `security-playbook.mdx`.
+
+Example D2 snippet:
+
+```d2
+direction: right
+A -> B: labeled edge
+```

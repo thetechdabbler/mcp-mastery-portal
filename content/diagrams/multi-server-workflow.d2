@@ -1,0 +1,10 @@
+direction: down
+
+host: Host orchestrator { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/computer-desktop.svg }
+s1: Server read-only tier { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/book-open.svg }
+s2: Server mutate tier { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/wrench-screwdriver.svg }
+s3: Server break-glass { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/bolt.svg }
+
+host -> s1
+host -> s2
+host -> s3: rare { style.stroke-dash: 5 }

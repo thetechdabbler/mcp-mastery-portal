@@ -1,0 +1,9 @@
+poison: {
+  shape: sequence_diagram
+  server: Server { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/server-stack.svg }
+  client: Client { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrows-right-left.svg }
+  model: Model planner { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cpu-chip.svg }
+  server -> client: tools/list metadata
+  client -> model: metadata in context
+  model -> model: instructions in description mislead planner
+}

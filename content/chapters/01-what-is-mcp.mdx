@@ -61,22 +61,7 @@ You already know APIs. MCP is a **host ↔ client ↔ server** contract for atta
 
 ## Picture this
 
-<Diagram id="mxn-before-after" caption="Before MCP: hosts re-integrate every backend. After MCP: each domain ships one server." alt="Flowchart comparing many host-backend arrows vs host through MCP client to multiple servers">
-
-{`flowchart LR
-  subgraph before [Before_MCP]
-    H1[HostA] --> B1[Backend1]
-    H1 --> B2[Backend2]
-    H2[HostB] --> B1
-    H2 --> B3[Backend3]
-  end
-  subgraph after [With_MCP]
-    H3[Host] --> C[MCP_Client]
-    C --> S1[Server1]
-    C --> S2[Server2]
-  end`}
-
-</Diagram>
+<Diagram id="mxn-before-after" caption="Before MCP: hosts re-integrate every backend. After MCP: each domain ships one server." alt="Flowchart comparing many host-backend arrows vs host through MCP client to multiple servers" />
 
 ## Mental model
 

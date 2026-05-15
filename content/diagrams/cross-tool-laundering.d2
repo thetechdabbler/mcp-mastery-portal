@@ -1,0 +1,9 @@
+launder: {
+  shape: sequence_diagram
+  model: Model { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/cpu-chip.svg }
+  t1: Low trust tool { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/arrow-down-circle.svg }
+  t2: High privilege tool { icon: https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/bolt.svg }
+  model -> t1: call
+  t1 -> model: attacker text
+  model -> t2: passes text as args
+}
