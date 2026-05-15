@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "diagrams": "node scripts/render-diagrams.mjs",
-    "predev": "node scripts/render-diagrams.mjs",
-    "prebuild": "node scripts/render-diagrams.mjs",
+    "predev": "node scripts/install-d2.mjs && node scripts/render-diagrams.mjs",
+    "prebuild": "node scripts/install-d2.mjs && node scripts/render-diagrams.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
