@@ -1,75 +1,51 @@
-import Link from "next/link";
-import { ResumeReading } from "@/components/resume-reading";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAllChapters, getAllLabs, getChallengeManifests } from "@/lib/content";
 import fs from "node:fs/promises";
+import { PortalHub, type TrackHubStats } from "@/components/portal-hub";
+import {
+  getAgentcoreChallengeManifests,
+  getAllAgentcoreChapters,
+  getAllAgentcoreLabs,
+} from "@/lib/agentcore-content";
+import { getAllChapters, getAllLabs, getChallengeManifests } from "@/lib/content";
+import { AGENTCORE_TAGLINES_PATH, CONTENT_ROOT } from "@/lib/content-paths";
 import path from "node:path";
 
+async function randomTagline(filePath: string, fallback: string): Promise<string> {
+  try {
+    const raw = await fs.readFile(filePath, "utf8");
+    const taglines = JSON.parse(raw) as string[];
+    return taglines[Math.floor(Math.random() * taglines.length)] ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export default async function HomePage() {
-  const [chapters, labs, challenges, taglinesRaw] = await Promise.all([
+  const [mcpChapters, mcpLabs, mcpChallenges, acChapters, acLabs, acChallenges] = await Promise.all([
     getAllChapters(),
     getAllLabs(),
     getChallengeManifests(),
-    fs.readFile(path.join(process.cwd(), "content", "taglines.json"), "utf8").catch(() => "[]"),
+    getAllAgentcoreChapters(),
+    getAllAgentcoreLabs(),
+    getAgentcoreChallengeManifests(),
   ]);
-  const taglines = JSON.parse(taglinesRaw) as string[];
-  const tagline = taglines[Math.floor(Math.random() * taglines.length)] ?? "MCP Mastery Portal";
 
-  return (
-    <div className="space-y-8">
-      <section>
-        <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Course</p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight">MCP Mastery Portal</h1>
-        <p className="mt-3 max-w-2xl text-lg text-muted-foreground">{tagline}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button asChild>
-            <Link href="/chapters">Start at chapter 1</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/agentcore">Multi-Agent (AgentCore) track</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/playground">Open playground</Link>
-          </Button>
-        </div>
-      </section>
-      <ResumeReading />
-      <section className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>{chapters.length} chapters</CardTitle>
-            <CardDescription>Theory + diagrams + quizzes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/chapters">Browse</Link>
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{labs.length} labs</CardTitle>
-            <CardDescription>Runnable Node workspaces</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/labs">Browse</Link>
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{challenges.length} challenges</CardTitle>
-            <CardDescription>Automated validators</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/challenges">Browse</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
-    </div>
-  );
+  const mcpTaglinesPath = path.join(CONTENT_ROOT, "taglines.json");
+  const stats: TrackHubStats[] = [
+    {
+      id: "mcp",
+      chapters: mcpChapters.length,
+      labs: mcpLabs.length,
+      challenges: mcpChallenges.length,
+      tagline: await randomTagline(mcpTaglinesPath, "MCP Mastery Portal"),
+    },
+    {
+      id: "agentcore",
+      chapters: acChapters.length,
+      labs: acLabs.length,
+      challenges: acChallenges.length,
+      tagline: await randomTagline(AGENTCORE_TAGLINES_PATH, "Multi-Agent AgentCore Track"),
+    },
+  ];
+
+  return <PortalHub stats={stats} />;
 }

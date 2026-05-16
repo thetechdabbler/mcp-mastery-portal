@@ -43,7 +43,7 @@ export default async function ChapterPage(props: Props) {
 
   return (
     <div>
-      <ChapterTracker slug={doc.frontmatter.slug} title={doc.frontmatter.title} />
+      <ChapterTracker slug={doc.frontmatter.slug} title={doc.frontmatter.title} track="mcp" />
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Badge variant="outline">Chapter {doc.frontmatter.order}</Badge>
         <Badge>{doc.frontmatter.difficulty}</Badge>

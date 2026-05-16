@@ -47,7 +47,7 @@ export default async function AgentcoreChapterPage(props: Props) {
 
   return (
     <div>
-      <ChapterTracker slug={doc.frontmatter.slug} title={doc.frontmatter.title} />
+      <ChapterTracker slug={doc.frontmatter.slug} title={doc.frontmatter.title} track="agentcore" />
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Badge variant="outline">Chapter {doc.frontmatter.order}</Badge>
         <Badge>{doc.frontmatter.difficulty}</Badge>
