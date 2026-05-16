@@ -1,0 +1,6 @@
+direction: right
+START -> Planner: invoke
+Planner -> Router: route
+Router -> ToolNode: tools
+ToolNode -> Planner: loop
+Planner -> END: finish

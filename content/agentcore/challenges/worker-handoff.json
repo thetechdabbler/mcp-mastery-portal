@@ -1,0 +1,17 @@
+{
+  "slug": "worker-handoff",
+  "title": "Worker Handoff Schema",
+  "difficulty": "boss",
+  "estMinutes": 35,
+  "packageDir": "c-09-worker-handoff",
+  "runner": "python",
+  "summary": "Validate Worker Handoff Schema implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

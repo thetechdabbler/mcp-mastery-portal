@@ -18,7 +18,10 @@ void ROLE_ICONS;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const srcDir = path.join(root, "content", "diagrams");
+const srcDirs = [
+  path.join(root, "content", "diagrams"),
+  path.join(root, "content", "agentcore", "diagrams"),
+];
 const outDir = path.join(root, "public", "diagrams");
 
 /** Applied before every diagram (D2 glob `***`). */
@@ -72,37 +75,47 @@ async function main() {
     process.exit(1);
   }
 
-  const entries = await fs.readdir(srcDir);
-  const d2Files = entries.filter((f) => f.endsWith(".d2") && !f.startsWith("_"));
-  if (d2Files.length === 0) {
-    console.warn("No .d2 files in", srcDir);
+  let rendered = 0;
+  let skipped = 0;
+  let totalSources = 0;
+
+  for (const srcDir of srcDirs) {
+    let entries;
+    try {
+      entries = await fs.readdir(srcDir);
+    } catch {
+      continue;
+    }
+    const d2Files = entries.filter((f) => f.endsWith(".d2") && !f.startsWith("_"));
+    totalSources += d2Files.length;
+
+    for (const file of d2Files) {
+      const id = file.replace(/\.d2$/, "");
+      const srcPath = path.join(srcDir, file);
+      const outPath = path.join(outDir, `${id}.svg`);
+      const body = await fs.readFile(srcPath, "utf8");
+      const combined = `${DIAGRAM_STYLE_PRELUDE}\n${body}`;
+      const tmpPath = path.join(outDir, `.tmp-${id}.d2`);
+      if (!(await isStale(srcPath, outPath))) {
+        skipped += 1;
+        continue;
+      }
+      await fs.writeFile(tmpPath, combined, "utf8");
+      try {
+        await run("d2", [tmpPath, outPath]);
+        rendered += 1;
+      } finally {
+        await fs.unlink(tmpPath).catch(() => {});
+      }
+    }
+  }
+
+  if (totalSources === 0) {
+    console.warn("No .d2 files in diagram source dirs");
     return;
   }
 
-  let rendered = 0;
-  let skipped = 0;
-
-  for (const file of d2Files) {
-    const id = file.replace(/\.d2$/, "");
-    const srcPath = path.join(srcDir, file);
-    const outPath = path.join(outDir, `${id}.svg`);
-    const body = await fs.readFile(srcPath, "utf8");
-    const combined = `${DIAGRAM_STYLE_PRELUDE}\n${body}`;
-    const tmpPath = path.join(outDir, `.tmp-${id}.d2`);
-    if (!(await isStale(srcPath, outPath))) {
-      skipped += 1;
-      continue;
-    }
-    await fs.writeFile(tmpPath, combined, "utf8");
-    try {
-      await run("d2", [tmpPath, outPath]);
-      rendered += 1;
-    } finally {
-      await fs.unlink(tmpPath).catch(() => {});
-    }
-  }
-
-  console.log(`diagrams: rendered ${rendered}, skipped ${skipped}, total sources ${d2Files.length}`);
+  console.log(`diagrams: rendered ${rendered}, skipped ${skipped}, total sources ${totalSources}`);
 }
 
 main().catch((e) => {

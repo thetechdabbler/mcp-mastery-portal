@@ -1,0 +1,25 @@
+[
+  {
+    "term": "AgentCore Runtime",
+    "slug": "agentcore-runtime",
+    "definition": "Managed execution environment for deploying agent frameworks like LangGraph."
+  },
+  {
+    "term": "Supervisor pattern",
+    "slug": "supervisor-pattern",
+    "aliases": [
+      "supervisor graph"
+    ],
+    "definition": "Orchestrator agent that delegates subtasks to specialized worker agents."
+  },
+  {
+    "term": "AgentCore Gateway",
+    "slug": "agentcore-gateway",
+    "definition": "Facade that exposes REST, Lambda, and MCP capabilities as unified agent tools."
+  },
+  {
+    "term": "LangGraph StateGraph",
+    "slug": "langgraph-stategraph",
+    "definition": "Graph abstraction with shared state, nodes, and conditional edges for agent workflows."
+  }
+]

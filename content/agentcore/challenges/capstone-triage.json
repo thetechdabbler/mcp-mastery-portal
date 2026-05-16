@@ -1,0 +1,17 @@
+{
+  "slug": "capstone-triage",
+  "title": "Capstone Triage",
+  "difficulty": "nightmare",
+  "estMinutes": 60,
+  "packageDir": "c-12-capstone-triage",
+  "runner": "python",
+  "summary": "Validate Capstone Triage implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

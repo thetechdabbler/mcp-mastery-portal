@@ -1,0 +1,17 @@
+{
+  "slug": "gateway-tool-call",
+  "title": "Gateway Tool Call",
+  "difficulty": "mid",
+  "estMinutes": 35,
+  "packageDir": "c-05-gateway-tool-call",
+  "runner": "python",
+  "summary": "Validate Gateway Tool Call implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "stategraph-basics",
+  "title": "StateGraph Basics",
+  "difficulty": "warmup",
+  "estMinutes": 25,
+  "packageDir": "c-02-stategraph-basics",
+  "runner": "python",
+  "summary": "Validate StateGraph Basics implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

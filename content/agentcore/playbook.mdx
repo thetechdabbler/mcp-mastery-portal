@@ -1,0 +1,13 @@
+---
+title: "Multi-Agent Playbook"
+---
+
+## Failure: ambiguous handoffs
+
+<Diagram id="ac-playbook-handoff-fail" caption="Handoffs without schemas invite wrong-tool calls." alt="Failed handoff flow" />
+
+## Mitigation
+
+- Define handoff payloads with versioned JSON schemas.
+- Scope MCP tools per worker; never give the supervisor every tool by default.
+- Log routing decisions and tool arguments (redacted) to AgentCore observability.

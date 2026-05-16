@@ -27,6 +27,9 @@ export default async function HomePage() {
             <Link href="/chapters">Start at chapter 1</Link>
           </Button>
           <Button asChild variant="outline">
+            <Link href="/agentcore">Multi-Agent (AgentCore) track</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link href="/playground">Open playground</Link>
           </Button>
         </div>

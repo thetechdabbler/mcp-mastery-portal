@@ -20,7 +20,9 @@
     "postbuild": "node scripts/build-pagefind.mjs",
     "content:check": "node --import tsx scripts/check-content.ts",
     "challenge": "node --import tsx scripts/run-challenge.ts",
-    "smoke:curriculum": "node --import tsx scripts/smoke-curriculum-server.ts"
+    "smoke:curriculum": "node --import tsx scripts/smoke-curriculum-server.ts",
+    "smoke:agentcore": "node --import tsx scripts/smoke-agentcore-curriculum-server.ts",
+    "install:uv": "node scripts/install-uv.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

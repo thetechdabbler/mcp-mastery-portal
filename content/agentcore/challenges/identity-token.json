@@ -1,0 +1,17 @@
+{
+  "slug": "identity-token",
+  "title": "Identity Token Scope",
+  "difficulty": "mid",
+  "estMinutes": 30,
+  "packageDir": "c-06-identity-token",
+  "runner": "python",
+  "summary": "Validate Identity Token Scope implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

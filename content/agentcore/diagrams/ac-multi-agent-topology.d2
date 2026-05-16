@@ -1,0 +1,8 @@
+direction: right
+Supervisor -> WorkerA: task slice
+Supervisor -> WorkerB: task slice
+WorkerA -> Supervisor: result + state
+WorkerB -> Supervisor: result + state
+MCP: {shape: cloud}
+WorkerA -> MCP: tools
+WorkerB -> MCP: tools

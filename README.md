@@ -9,10 +9,9 @@ npm install
 npm run dev
 ```
 
-- Chapters: `/chapters`
-- Labs (workspaces under `labs/`): `/labs`
-- Challenges (workspaces under `challenges/`): `/challenges`
-- Curriculum MCP server: `npm run smoke:curriculum`
+- **MCP track:** `/chapters`, `/labs`, `/challenges`
+- **AgentCore track** (multi-agent + LangGraph + MCP): `/agentcore`
+- Curriculum MCP servers: `npm run smoke:curriculum`, `npm run smoke:agentcore`
 
 ## Scripts
 
@@ -22,8 +21,10 @@ npm run dev
 | `npm run typecheck` | `tsc --noEmit` (portal only) |
 | `npm test` | Vitest |
 | `npm run content:check` | Validate chapter frontmatter + diagrams |
-| `npm run challenge -- <slug>` | Run a challenge validator |
-| `npm run challenge -- --all` | Run all validators |
+| `npm run challenge -- <slug>` | Run an MCP challenge validator (Node) |
+| `npm run challenge -- <slug> --track agentcore` | Run an AgentCore challenge (Python via uv) |
+| `npm run challenge -- --all` | Run all MCP validators |
+| `npm run install:uv` | Install uv for Python labs/challenges |
 | `npm run build` | Production build + Pagefind hook (noop unless static site) |
 
 ## Glossary auto-linking
@@ -34,7 +35,9 @@ The `remark-glossary-link` plugin is present under `lib/remark-glossary-link.ts`
 
 - `labs/*` — hands-on MCP servers (starter + `solution/`).
 - `challenges/*` — MCP servers validated by `tests/validate.ts`.
-- `packages/mcp-curriculum-server` — dogfood MCP server exposing curriculum resources.
+- `packages/mcp-curriculum-server` — dogfood MCP server exposing MCP curriculum resources.
+- `packages/agentcore-curriculum-server` — dogfood MCP server for the AgentCore track.
+- `labs/agentcore/*`, `challenges/agentcore/*` — Python (uv) workspaces for the AgentCore track.
 
 ## License
 

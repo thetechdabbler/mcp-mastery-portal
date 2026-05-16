@@ -1,0 +1,17 @@
+{
+  "slug": "eval-golden-set",
+  "title": "Golden Set Eval",
+  "difficulty": "boss",
+  "estMinutes": 40,
+  "packageDir": "c-11-eval-golden-set",
+  "runner": "python",
+  "summary": "Validate Golden Set Eval implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

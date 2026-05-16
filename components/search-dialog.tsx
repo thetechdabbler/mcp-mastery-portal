@@ -9,7 +9,7 @@ export function SearchDialog() {
   const [q, setQ] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [hits, setHits] = React.useState<
-    { type: string; title: string; href: string; snippet: string }[]
+    { type: string; track?: string; title: string; href: string; snippet: string }[]
   >([]);
 
   React.useEffect(() => {
@@ -71,7 +71,9 @@ export function SearchDialog() {
                     className="block rounded border bg-muted/30 px-2 py-2 hover:bg-muted"
                     onClick={() => setOpen(false)}
                   >
-                    <span className="text-[10px] uppercase text-muted-foreground">{h.type}</span>
+                    <span className="text-[10px] uppercase text-muted-foreground">
+                      {h.track ?? "mcp"} · {h.type}
+                    </span>
                     <div className="font-medium">{h.title}</div>
                     <div className="line-clamp-2 text-xs text-muted-foreground">{h.snippet}</div>
                   </Link>

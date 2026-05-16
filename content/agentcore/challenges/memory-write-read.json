@@ -1,0 +1,17 @@
+{
+  "slug": "memory-write-read",
+  "title": "Memory Write Read",
+  "difficulty": "mid",
+  "estMinutes": 30,
+  "packageDir": "c-04-memory-write-read",
+  "runner": "python",
+  "summary": "Validate Memory Write Read implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

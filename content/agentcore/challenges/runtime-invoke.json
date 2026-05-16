@@ -1,0 +1,17 @@
+{
+  "slug": "runtime-invoke",
+  "title": "Runtime Invoke",
+  "difficulty": "boss",
+  "estMinutes": 45,
+  "packageDir": "c-10-runtime-invoke",
+  "runner": "python",
+  "summary": "Validate Runtime Invoke implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

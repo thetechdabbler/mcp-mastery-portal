@@ -1,0 +1,17 @@
+{
+  "slug": "supervisor-routing",
+  "title": "Supervisor Routing",
+  "difficulty": "warmup",
+  "estMinutes": 20,
+  "packageDir": "c-01-supervisor-routing",
+  "runner": "python",
+  "summary": "Validate Supervisor Routing implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "mock-bedrock-node",
+  "title": "Mock Bedrock Node",
+  "difficulty": "warmup",
+  "estMinutes": 25,
+  "packageDir": "c-03-mock-bedrock-node",
+  "runner": "python",
+  "summary": "Validate Mock Bedrock Node implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

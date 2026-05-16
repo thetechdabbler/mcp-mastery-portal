@@ -1,0 +1,17 @@
+{
+  "slug": "observability-span",
+  "title": "Observability Span",
+  "difficulty": "mid",
+  "estMinutes": 30,
+  "packageDir": "c-08-observability-span",
+  "runner": "python",
+  "summary": "Validate Observability Span implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

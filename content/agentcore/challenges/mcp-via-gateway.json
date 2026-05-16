@@ -1,0 +1,17 @@
+{
+  "slug": "mcp-via-gateway",
+  "title": "MCP Via Gateway",
+  "difficulty": "mid",
+  "estMinutes": 40,
+  "packageDir": "c-07-mcp-via-gateway",
+  "runner": "python",
+  "summary": "Validate MCP Via Gateway implementation.",
+  "hints": [
+    "Use uv run",
+    "Check tests/validate.py"
+  ],
+  "acceptance": [
+    "pytest-style checks pass",
+    "Graph returns expected route"
+  ]
+}

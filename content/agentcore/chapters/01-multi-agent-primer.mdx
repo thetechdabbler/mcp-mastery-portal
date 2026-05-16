@@ -1,0 +1,80 @@
+---
+slug: "01-multi-agent-primer"
+title: "Multi-Agent Systems Primer"
+subtitle: "Supervisors, workers, swarms, and why handoffs need contracts."
+track: "agentcore"
+order: 1
+difficulty: "warmup"
+estMinutes: 25
+langgraphVersion: "^0.4"
+pythonVersion: ">=3.11"
+lastReviewed: "2026-05-16"
+mistakesPrevented: 4
+agentcoreFeatures:
+  - "runtime"
+objectives:
+  - "Explain multi-agent systems primer in production terms"
+  - "Relate LangGraph graphs to AgentCore primitives"
+  - "Identify where MCP tools attach in the topology"
+diagrams:
+  - "ac-multi-agent-topology"
+quiz:
+  - q: "What is the primary focus of Multi-Agent Systems Primer?"
+    options:
+      - "GPU tuning"
+      - "Multi-agent orchestration with MCP"
+      - "CSS grids"
+      - "DNS TTL"
+    answer: 1
+    explain: "This track covers LangGraph orchestration on AWS Bedrock AgentCore with MCP tools."
+  - q: "Which pattern routes work between specialized agents?"
+    options:
+      - "Singleton"
+      - "Supervisor / worker"
+      - "Factory method only"
+      - "B-tree indexing"
+    answer: 1
+    explain: "Supervisor graphs delegate to workers with explicit handoff contracts."
+  - q: "Why expose tools through AgentCore Gateway?"
+    options:
+      - "To remove auth"
+      - "To unify REST, Lambda, and MCP servers behind one tool surface"
+      - "To disable observability"
+      - "To avoid schemas"
+    answer: 1
+    explain: "Gateway normalizes external capabilities for agents with governance hooks."
+references:
+  - label: "Amazon Bedrock AgentCore"
+    url: "https://docs.aws.amazon.com/bedrock-agentcore/"
+  - label: "LangGraph docs"
+    url: "https://langchain-ai.github.io/langgraph/"
+  - label: "Model Context Protocol"
+    url: "https://modelcontextprotocol.io/"
+---
+
+## Overview
+
+Supervisors, workers, swarms, and why handoffs need contracts.
+
+<Diagram id="ac-multi-agent-topology" caption="Multi-Agent Systems Primer architecture." alt="Diagram for Multi-Agent Systems Primer" />
+
+## Key ideas
+
+- **LangGraph** owns orchestration: explicit state, nodes, and conditional edges.
+- **AgentCore** owns production concerns: runtime hosting, memory, identity, gateway, observability.
+- **MCP** standardizes tool surfaces so workers do not hard-code every backend integration.
+
+<Callout variant="info">
+Labs 1–3 in `labs/agentcore/` follow a local mocked progression. Read the lab README for IAM and cost notes.
+</Callout>
+
+## Walkthrough
+
+1. Model the workflow as a graph: who plans, who executes tools, who summarizes.
+2. Attach MCP tools through Gateway (or local mocks in early labs).
+3. Add Memory for session continuity and Identity before calling protected APIs.
+4. Instrument traces and run golden-set evals before promoting changes.
+
+<RealTalk>
+If your supervisor cannot explain *why* it routed to a worker, you do not have observability — you have vibes with extra steps.
+</RealTalk>

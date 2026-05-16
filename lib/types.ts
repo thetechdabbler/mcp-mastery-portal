@@ -41,6 +41,33 @@ export type ChapterDoc = {
   filePath: string;
 };
 
+export const agentcoreFeatureSchema = z.enum([
+  "runtime",
+  "memory",
+  "identity",
+  "gateway",
+  "browser",
+  "code-interpreter",
+  "observability",
+]);
+export type AgentcoreFeature = z.infer<typeof agentcoreFeatureSchema>;
+
+export const agentcoreChapterFrontmatterSchema = chapterFrontmatterSchema
+  .omit({ specVersion: true, sdkVersion: true })
+  .extend({
+    track: z.literal("agentcore"),
+    agentcoreFeatures: z.array(agentcoreFeatureSchema).min(1),
+    langgraphVersion: z.string(),
+    pythonVersion: z.string(),
+  });
+export type AgentcoreChapterFrontmatter = z.infer<typeof agentcoreChapterFrontmatterSchema>;
+
+export type AgentcoreChapterDoc = {
+  frontmatter: AgentcoreChapterFrontmatter;
+  body: string;
+  filePath: string;
+};
+
 export const challengeManifestSchema = z.object({
   slug: z.string(),
   title: z.string(),
@@ -50,6 +77,7 @@ export const challengeManifestSchema = z.object({
   summary: z.string(),
   hints: z.array(z.string()).min(1),
   acceptance: z.array(z.string()).min(1),
+  runner: z.enum(["node", "python"]).default("node"),
 });
 export type ChallengeManifest = z.infer<typeof challengeManifestSchema>;
 

@@ -32,3 +32,9 @@ public/pagefind
 
 # typescript incremental build cache
 *.tsbuildinfo
+.vercel
+
+# Python (AgentCore labs/challenges)
+**/.venv
+**/__pycache__
+**/.pytest_cache

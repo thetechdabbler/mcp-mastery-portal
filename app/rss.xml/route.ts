@@ -1,15 +1,29 @@
+import { getAllAgentcoreChapters } from "@/lib/agentcore-content";
 import { getAllChapters } from "@/lib/content";
 
 export async function GET() {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const chapters = await getAllChapters();
-  const items = chapters
+  const [chapters, acChapters] = await Promise.all([getAllChapters(), getAllAgentcoreChapters()]);
+  const mcpItems = chapters
     .map(
       (c) => `
     <item>
       <title>${escapeXml(c.frontmatter.title)}</title>
       <link>${base}/chapters/${c.frontmatter.slug}</link>
       <guid>${base}/chapters/${c.frontmatter.slug}</guid>
+      <category>MCP</category>
+      <pubDate>${new Date(c.frontmatter.lastReviewed).toUTCString()}</pubDate>
+    </item>`,
+    )
+    .join("");
+  const acItems = acChapters
+    .map(
+      (c) => `
+    <item>
+      <title>${escapeXml(c.frontmatter.title)}</title>
+      <link>${base}/agentcore/chapters/${c.frontmatter.slug}</link>
+      <guid>${base}/agentcore/chapters/${c.frontmatter.slug}</guid>
+      <category>AgentCore</category>
       <pubDate>${new Date(c.frontmatter.lastReviewed).toUTCString()}</pubDate>
     </item>`,
     )
@@ -19,8 +33,9 @@ export async function GET() {
   <channel>
     <title>MCP Mastery Portal</title>
     <link>${base}</link>
-    <description>MCP curriculum chapters</description>
-    ${items}
+    <description>MCP + AgentCore curriculum chapters</description>
+    ${mcpItems}
+    ${acItems}
   </channel>
 </rss>`;
   return new Response(xml, { headers: { "Content-Type": "application/rss+xml" } });
