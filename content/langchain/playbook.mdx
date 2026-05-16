@@ -1,0 +1,49 @@
+---
+title: "LangChain & LangGraph Production Playbook"
+---
+
+## Pre-flight checklist
+
+<Diagram id="lc-playbook-pre-flight-checklist" caption="The checklist before an agent leaves the notebook and starts touching real users." alt="Checklist flow for production readiness" />
+
+Before a LangChain or LangGraph system ships, make the contract boring. Inputs are typed. Outputs are validated. Tool calls are named. State has a retention policy. Traces have tags. Costs have limits. If any of that sounds excessive, congratulations: you have discovered why demos become incidents.
+
+| Area | Ship only when | The footgun |
+| --- | --- | --- |
+| State | Threads, reducers, and checkpoint retention are explicit | One global chat history because it was easy |
+| Tools | Allowlisted, typed, and wrapped in boring result envelopes | The model gets to improvise API intent |
+| Retrieval | Measured recall and citations | Vector store karaoke |
+| Cost | Budgets per branch and provider-level limits | Finance finds out before engineering |
+| Security | Injection tests and approval gates | Prompt-as-policy cosplay |
+
+## Observability
+
+Trace every meaningful node. Add tags for tenant, environment, graph version, prompt version, model, and cost tier. Debugging without those fields is not debugging. It is staring into a JSON blob until lunch becomes dinner.
+
+## Persistence
+
+Use a real checkpointer for anything user-facing. In-memory is a demo, a unit test, or a future apology. Pick Postgres when you need operational familiarity and Redis when fast resumability beats relational comfort.
+
+## Cost
+
+Use cheap models for classification, routing, extraction, and input cleanup. Reserve expensive models for synthesis and judgment where quality justifies the bill. If every node uses the flagship model, you built a money printer pointed the wrong way.
+
+## Security
+
+Assume every retrieved document and user message is hostile until proven boring. Validate structured outputs, sandbox code execution, isolate secrets, and put human approval in front of irreversible actions.
+
+## Deployment
+
+LangServe is excellent when your product shape matches runnable endpoints. Plain FastAPI is better when you need custom auth, long-running workflow control, or product-specific orchestration. Use the tool that fits. Revolutionary, apparently.
+
+## On-call decision tree
+
+<Diagram id="lc-playbook-on-call-decision" caption="When the graph misbehaves, debug with evidence instead of interpretive dance." alt="On-call debugging decision tree for graph failures" />
+
+1. Find the trace by thread id, tenant, and graph version.
+2. Check whether the failure is input, retrieval, tool, model, or state.
+3. Replay from the last checkpoint if the state is valid.
+4. Fork the run if the fix is experimental.
+5. Patch the guardrail or evaluator before re-running production traffic.
+
+You can be cocky after the system can explain itself. Before that, you are just loud.

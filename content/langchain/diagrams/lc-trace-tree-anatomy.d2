@@ -1,0 +1,14 @@
+// Brand-aware LangChain zero-to-hero diagram: trace-tree-anatomy
+direction: right
+
+lc: LangChain { icon: ../icons/langchain/langchain.svg }
+py: Python { icon: ../icons/langchain/python.svg }
+pg: Postgres { icon: ../icons/langchain/postgresql.svg }
+obs: Observability { icon: ../icons/langchain/trace.svg }
+user: User { icon: ../icons/langchain/user.svg }
+
+user -> lc: request
+lc -> py: runnable or graph
+py -> pg: checkpoint or retrieve
+py -> obs: trace
+obs -> user: explain

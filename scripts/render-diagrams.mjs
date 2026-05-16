@@ -12,15 +12,17 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-import { ROLE_ICONS } from "./diagram-icon-urls.mjs";
+import { BRAND_ICONS, ROLE_ICONS } from "./diagram-icon-urls.mjs";
 
 void ROLE_ICONS;
+void BRAND_ICONS;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const srcDirs = [
   path.join(root, "content", "diagrams"),
   path.join(root, "content", "agentcore", "diagrams"),
+  path.join(root, "content", "langchain", "diagrams"),
 ];
 const outDir = path.join(root, "public", "diagrams");
 

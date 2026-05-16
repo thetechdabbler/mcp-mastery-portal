@@ -4,6 +4,8 @@
  */
 const HERO = (/** @type {string} */ name) =>
   `https://cdn.jsdelivr.net/npm/heroicons@2.1.1/24/outline/${name}.svg`;
+const SIMPLE = (/** @type {string} */ name) => `https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${name}.svg`;
+const LOCAL_LANGCHAIN = (/** @type {string} */ name) => `/icons/langchain/${name}.svg`;
 
 /** @type {Record<string, string>} */
 export const ROLE_ICONS = {
@@ -46,4 +48,26 @@ export const ROLE_ICONS = {
   cancel: HERO("stop-circle"),
   capstoneCode: HERO("code-bracket-square"),
   capstoneDocs: HERO("document-duplicate"),
+};
+
+/** @type {Record<string, string>} */
+export const BRAND_ICONS = {
+  langchain: SIMPLE("langchain"),
+  python: SIMPLE("python"),
+  postgresql: SIMPLE("postgresql"),
+  redis: SIMPLE("redis"),
+  openai: SIMPLE("openai"),
+  anthropic: SIMPLE("anthropic"),
+  fastapi: SIMPLE("fastapi"),
+  pydantic: SIMPLE("pydantic"),
+  cohere: SIMPLE("cohere"),
+  docker: SIMPLE("docker"),
+  kubernetes: SIMPLE("kubernetes"),
+  langgraph: LOCAL_LANGCHAIN("langgraph"),
+  langsmith: LOCAL_LANGCHAIN("langsmith"),
+  langserve: LOCAL_LANGCHAIN("langserve"),
+  chroma: LOCAL_LANGCHAIN("chroma"),
+  faiss: LOCAL_LANGCHAIN("faiss"),
+  pgvector: LOCAL_LANGCHAIN("pgvector"),
+  bge: LOCAL_LANGCHAIN("bge"),
 };

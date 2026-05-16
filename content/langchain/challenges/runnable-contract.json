@@ -1,0 +1,19 @@
+{
+  "slug": "runnable-contract",
+  "title": "Runnable Contract",
+  "difficulty": "warmup",
+  "estMinutes": 25,
+  "packageDir": "c-01-runnable-contract",
+  "runner": "python",
+  "summary": "Prove you can ship invoke, batch, and stream without hiding a for-loop and calling it streaming.",
+  "hints": [
+    "If stream buffers the whole string before yielding, you are cosplaying Iterable, not streaming.",
+    "Match the validator literally: double `n`, stringify the doubled value for stream chunks.",
+    "Batch must preserve ordering — shuffling outputs is an excellent way to fail quietly."
+  ],
+  "acceptance": [
+    "`npm run challenge -- runnable-contract --track langchain` exits 0",
+    "`invoke`, `batch`, and `stream` agree on the doubling rule for integer field `n`",
+    "Streaming yields each character of the decimal string (no extra separators)"
+  ]
+}

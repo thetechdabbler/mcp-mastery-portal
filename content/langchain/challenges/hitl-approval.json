@@ -1,0 +1,19 @@
+{
+  "slug": "hitl-approval",
+  "title": "HITL Approval Gate",
+  "difficulty": "mid",
+  "estMinutes": 40,
+  "packageDir": "c-03-hitl-approval",
+  "runner": "python",
+  "summary": "Draft, interrupt with a payload, resume with a human decision — the boring backbone of safe automation.",
+  "hints": [
+    "Stages are spelled `draft`, `awaiting_human`, `final` — typos are your own boss fight.",
+    "`interrupt_payload` must append `interrupt:human_review` to `trace` after the check passes.",
+    "Rejections should land in `final` too; stalled graphs are a support ticket factory."
+  ],
+  "acceptance": [
+    "`npm run challenge -- hitl-approval --track langchain` exits 0",
+    "Approved resumes append `node:finalize` and `APPROVED` to the draft",
+    "Rejected resumes mark `human_decision` false and refuse to pretend nothing happened"
+  ]
+}

@@ -1,0 +1,14 @@
+// LangChain zero-to-hero diagram: checkpointer-thread-tree
+direction: right
+
+input: Input { icon: ../icons/langchain/input.svg }
+contract: "Checkpointer Thread Tree" { icon: ../icons/langchain/contract.svg }
+trace: Trace { icon: ../icons/langchain/trace.svg }
+state: State { icon: ../icons/langchain/state.svg }
+output: Output { icon: ../icons/langchain/output.svg }
+
+input -> contract: validate
+contract -> state: update
+contract -> trace: emit events
+state -> output: resume or finish
+trace -> output: explain

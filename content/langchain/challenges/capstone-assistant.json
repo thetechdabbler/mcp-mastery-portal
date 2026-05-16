@@ -1,0 +1,20 @@
+{
+  "slug": "capstone-assistant",
+  "title": "Capstone Assistant",
+  "difficulty": "boss",
+  "estMinutes": 55,
+  "packageDir": "c-04-capstone-assistant",
+  "runner": "python",
+  "summary": "Route, retrieve, gate spicy verbs, trace everything, and stop before your pretend tokens bankrupt the pretend budget.",
+  "hints": [
+    "Sensitive verbs include delete/wipe/exfil/password/dump — broad enough to be annoying, small enough to test.",
+    "RAG spends budget on retrieve then synthesize; exhaust early to prove you handle `budget_exhausted`.",
+    "HITL approval spends a single `hitl_exec` chunk before returning the canned execution line."
+  ],
+  "acceptance": [
+    "`npm run challenge -- capstone-assistant --track langchain` exits 0",
+    "`run_turn` returns `need_human` until `human_approved` is provided for sensitive routes",
+    "Trace includes `rag:doc-*`, `direct:replied`, and `hitl:executed` where appropriate",
+    "Budget monotonically decreases on successful spends and blocks overspend"
+  ]
+}

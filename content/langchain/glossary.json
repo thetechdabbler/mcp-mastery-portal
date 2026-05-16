@@ -1,0 +1,127 @@
+[
+  {
+    "term": "Runnable",
+    "slug": "runnable",
+    "definition": "The core LangChain interface for invokable units that support sync, async, batch, stream, config, and composition."
+  },
+  {
+    "term": "LCEL",
+    "slug": "lcel",
+    "definition": "LangChain Expression Language: the pipe-friendly composition layer for building runnable graphs without inventing another framework in a meeting."
+  },
+  {
+    "term": "StateGraph",
+    "slug": "stategraph",
+    "definition": "A LangGraph graph definition whose nodes read and return typed state updates."
+  },
+  {
+    "term": "Checkpointer",
+    "slug": "checkpointer",
+    "definition": "Durable storage for graph state snapshots, resumes, interrupts, and time-travel debugging."
+  },
+  {
+    "term": "Thread",
+    "slug": "thread",
+    "definition": "A logical conversation or run identity used by checkpointers to resume the right graph state."
+  },
+  {
+    "term": "Reducer",
+    "slug": "reducer",
+    "definition": "A function that merges node updates into graph state, usually where message history gets less cursed."
+  },
+  {
+    "term": "Tool",
+    "slug": "tool",
+    "definition": "A callable capability exposed to a model or graph node with a name, description, and schema."
+  },
+  {
+    "term": "bind_tools",
+    "slug": "bind-tools",
+    "definition": "The ChatModel method that attaches tool schemas so the model can request calls instead of hallucinating APIs."
+  },
+  {
+    "term": "Retriever",
+    "slug": "retriever",
+    "definition": "A component that returns relevant documents for a query from a corpus or search backend."
+  },
+  {
+    "term": "Re-ranker",
+    "slug": "re-ranker",
+    "definition": "A second-stage scorer that reorders retrieved candidates by relevance before the model sees them."
+  },
+  {
+    "term": "Parent-Document Retriever",
+    "slug": "parent-document-retriever",
+    "definition": "A retrieval pattern that searches smaller chunks but returns larger parent documents for usable context."
+  },
+  {
+    "term": "Hybrid Search",
+    "slug": "hybrid-search",
+    "definition": "Retrieval that blends lexical matching with dense vectors, because embeddings alone are not a personality."
+  },
+  {
+    "term": "Interrupt",
+    "slug": "interrupt",
+    "definition": "A LangGraph pause point that asks an external actor to approve, edit, or provide data before continuing."
+  },
+  {
+    "term": "Time Travel",
+    "slug": "time-travel",
+    "definition": "Checkpoint-based replay or fork of a graph run from an earlier state."
+  },
+  {
+    "term": "Supervisor",
+    "slug": "supervisor",
+    "definition": "A routing agent that decides which worker or node handles the next step."
+  },
+  {
+    "term": "Swarm",
+    "slug": "swarm",
+    "definition": "A multi-agent handoff pattern where control moves between peers instead of one boss router."
+  },
+  {
+    "term": "LangSmith Run",
+    "slug": "langsmith-run",
+    "definition": "A traced unit of execution with inputs, outputs, metadata, child runs, and enough evidence to debug the weird thing."
+  },
+  {
+    "term": "Evaluator",
+    "slug": "evaluator",
+    "definition": "A function or model-backed judge that scores outputs against expected behavior."
+  },
+  {
+    "term": "LLM-as-Judge",
+    "slug": "llm-as-judge",
+    "definition": "An evaluation pattern where a model grades model output, useful when calibrated and comedy when not."
+  },
+  {
+    "term": "Prompt Hub",
+    "slug": "prompt-hub",
+    "definition": "A registry for versioning prompts instead of hiding them in heroic Python strings."
+  },
+  {
+    "term": "LangServe Route",
+    "slug": "langserve-route",
+    "definition": "An HTTP endpoint generated around a runnable for invoke, batch, stream, and playground use."
+  },
+  {
+    "term": "astream_events",
+    "slug": "astream-events",
+    "definition": "The event stream API for observing runnable progress, tokens, node boundaries, and custom events."
+  },
+  {
+    "term": "Pydantic Args",
+    "slug": "pydantic-args",
+    "definition": "Typed tool argument schemas that prevent the model from sending nonsense with confidence."
+  },
+  {
+    "term": "with_structured_output",
+    "slug": "with-structured-output",
+    "definition": "A model wrapper that coerces responses into a typed schema instead of asking JSON politely."
+  },
+  {
+    "term": "MessagesState",
+    "slug": "messagesstate",
+    "definition": "A LangGraph state helper for chat histories with message-aware merging."
+  }
+]

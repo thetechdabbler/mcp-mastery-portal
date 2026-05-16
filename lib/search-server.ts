@@ -8,10 +8,15 @@ import {
   getAllAgentcoreChapters,
   getAllAgentcoreLabs,
 } from "@/lib/agentcore-content";
+import {
+  getLangchainChallengeManifests,
+  getAllLangchainChapters,
+  getAllLangchainLabs,
+} from "@/lib/langchain-content";
 
 export type SearchHit = {
   type: "chapter" | "lab" | "challenge";
-  track: "mcp" | "agentcore";
+  track: "mcp" | "agentcore" | "langchain";
   title: string;
   href: string;
   snippet: string;
@@ -50,6 +55,20 @@ export async function localSearch(query: string): Promise<SearchHit[]> {
     }
   }
 
+  const lcChapters = await getAllLangchainChapters();
+  for (const c of lcChapters) {
+    const hay = `${c.frontmatter.title} ${c.body}`.toLowerCase();
+    if (hay.includes(q)) {
+      hits.push({
+        type: "chapter",
+        track: "langchain",
+        title: c.frontmatter.title,
+        href: `/langchain/chapters/${c.frontmatter.slug}`,
+        snippet: c.body.slice(0, 140).replace(/\s+/g, " "),
+      });
+    }
+  }
+
   const labs = await getAllLabs();
   for (const l of labs) {
     const hay = `${l.title} ${l.readme}`.toLowerCase();
@@ -78,6 +97,20 @@ export async function localSearch(query: string): Promise<SearchHit[]> {
     }
   }
 
+  const lcLabs = await getAllLangchainLabs();
+  for (const l of lcLabs) {
+    const hay = `${l.title} ${l.readme}`.toLowerCase();
+    if (hay.includes(q)) {
+      hits.push({
+        type: "lab",
+        track: "langchain",
+        title: l.title,
+        href: `/langchain/labs/${l.slug}`,
+        snippet: l.readme.slice(0, 140).replace(/\s+/g, " "),
+      });
+    }
+  }
+
   const challenges = await getChallengeManifests();
   for (const ch of challenges) {
     const hay = `${ch.title} ${ch.summary}`.toLowerCase();
@@ -101,6 +134,20 @@ export async function localSearch(query: string): Promise<SearchHit[]> {
         track: "agentcore",
         title: ch.title,
         href: `/agentcore/challenges/${ch.slug}`,
+        snippet: ch.summary,
+      });
+    }
+  }
+
+  const lcChallenges = await getLangchainChallengeManifests();
+  for (const ch of lcChallenges) {
+    const hay = `${ch.title} ${ch.summary}`.toLowerCase();
+    if (hay.includes(q)) {
+      hits.push({
+        type: "challenge",
+        track: "langchain",
+        title: ch.title,
+        href: `/langchain/challenges/${ch.slug}`,
         snippet: ch.summary,
       });
     }

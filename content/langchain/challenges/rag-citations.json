@@ -1,0 +1,19 @@
+{
+  "slug": "rag-citations",
+  "title": "RAG with Citations",
+  "difficulty": "mid",
+  "estMinutes": 35,
+  "packageDir": "c-02-rag-citations",
+  "runner": "python",
+  "summary": "Offline retrieval that cites sources like an adult, not like a model vibes-printing footnotes.",
+  "hints": [
+    "Token overlap is primitive; deterministic rerank rules are how you avoid flaky tests.",
+    "The validator looks for `doc-widget` and actual substring overlap in `snippet`.",
+    "If two docs tie, break ties with a stable secondary key — priority, then id."
+  ],
+  "acceptance": [
+    "`npm run challenge -- rag-citations --track langchain` exits 0",
+    "`answer_query` returns `answer` plus `citations` with `id` and `snippet`",
+    "Widget queries surface `doc-widget`; Runnable jargon surfaces `doc-lc`"
+  ]
+}

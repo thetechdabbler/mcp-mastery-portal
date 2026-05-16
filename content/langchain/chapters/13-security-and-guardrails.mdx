@@ -1,0 +1,131 @@
+---
+slug: 13-security-and-guardrails
+title: "Security and Guardrails \u2014 Your agent is an untrusted browser with a wallet."
+subtitle: "Your agent is an untrusted browser with a wallet."
+order: 13
+difficulty: boss
+estMinutes: 45
+track: langchain
+langchainVersion: "0.3.x"
+langgraphVersion: "0.2.x"
+pythonVersion: "3.11"
+langsmith: true
+lastReviewed: "2026-05-16"
+mistakesPrevented: 11
+objectives:
+  - "Explain agent security without hand-waving."
+  - "Choose when to allowlists, schemas, sandboxing, and approvals around risky tools."
+  - "Identify and avoid trusting a prompt to enforce a policy that should live in code."
+  - "Trace the production risk before it becomes an incident."
+diagrams:
+  - lc-injection-vectors
+  - lc-defense-in-depth-layers
+quiz:
+  - q: "What is the safest first move when designing agent security?"
+    options:
+      - "Name the state, inputs, outputs, and failure modes before coding"
+      - "Start with the fanciest model and hope the graph behaves"
+      - "Hide the contract inside the prompt because it feels flexible"
+    answer: 0
+    explain: "The stack rewards explicit contracts. Prompts are not a replacement for architecture."
+  - q: "Which signal says the implementation is ready for production review?"
+    options:
+      - "It has tracing, bounded costs, validation, and a rollback story"
+      - "It worked once in a notebook"
+      - "The model sounded confident during the demo"
+    answer: 0
+    explain: "Production readiness is evidence, not charisma."
+  - q: "Which anti-pattern does this chapter explicitly call out?"
+    options:
+      - "Letting the model decide which tool to call with no allowlist"
+      - "Using typed inputs and boring tests"
+      - "Writing down tradeoffs before shipping"
+    answer: 0
+    explain: "The Hall of Shame exists so the same footgun does not get rediscovered with fresh enthusiasm."
+references:
+  - label: "LangChain Python docs"
+    url: "https://python.langchain.com/docs/"
+  - label: "LangGraph Python docs"
+    url: "https://langchain-ai.github.io/langgraph/"
+  - label: "LangSmith docs"
+    url: "https://docs.smith.langchain.com/"
+---
+## The setup
+
+You are here because agent security moved from notebook magic to product surface area. That is where the charming demo stops being charming and starts asking for state, tests, traces, and a budget.
+
+This chapter gives prompt injection, validation, tool allowlists, sandboxing, secret hygiene, and guardrail layers. The point is not to memorize one API call. The point is to know which abstraction deserves trust and which one is wearing a fake mustache.
+
+## Picture this
+
+<Diagram id="lc-injection-vectors" caption="The production shape of agent security before the code starts freelancing." alt="Diagram showing agent security components and data flow" />
+
+## Mental model
+
+Think in contracts first. A LangChain runnable or LangGraph node is not a poetic suggestion; it is a boundary with inputs, outputs, config, callbacks, and failure modes. If you cannot describe those five things, you are not designing an agent system. You are hosting an improv night.
+
+| Decision | Use this | Not that |
+| --- | --- | --- |
+| Primary move | allowlists, schemas, sandboxing, and approvals around risky tools | trusting a prompt to enforce a policy that should live in code |
+| Evidence | Traceable runs, typed payloads, and repeatable examples | A screenshot of one lucky response |
+| Failure posture | Retry, fallback, or interrupt with a reason | Hope the model apologizes convincingly |
+
+<Callout variant="info" title="Cocky, not careless">
+Confidence is earned by making the boring parts visible: schemas, state, traces, budgets, and tests. The model can be creative. Your architecture does not get that privilege.
+</Callout>
+
+## Walkthrough
+
+Start with a tiny runnable-shaped contract. Yes, it looks small. That is the point. Small contracts are how you stop a graph from becoming a haunted house.
+
+```python
+from langchain_core.runnables import RunnableLambda
+
+
+def describe_contract(payload: dict) -> dict:
+    return {
+        "input": payload["input"],
+        "risk": "bounded",
+        "next_step": "trace-and-test",
+    }
+
+chain = RunnableLambda(describe_contract).with_config(tags=["chapter-13"])
+result = chain.invoke({"input": "ship the graph, not the vibes"})
+print(result)
+```
+
+Now attach the concept to the actual chapter topic: prompt injection, validation, tool allowlists, sandboxing, secret hygiene, and guardrail layers. The implementation pattern is deliberately boring: define the boundary, tag the run, record the outcome, then decide whether the next branch is cheap, risky, or worth human attention.
+
+<Diagram id="lc-defense-in-depth-layers" caption="How agent security behaves once state, observability, and failure paths are admitted into the room." alt="Second diagram for agent security showing execution and control flow" />
+
+### Try this yourself
+
+1. Write a runnable or graph node for the smallest useful version of this chapter's pattern.
+2. Add tags and metadata before you run it. Future you deserves evidence, not folklore.
+3. Create one failure case on purpose and decide whether it should retry, fallback, interrupt, or stop.
+
+## Hall of Shame
+
+<HallOfShame tag="langchain" title="Letting the model decide which tool to call with no allowlist">
+This is the move that looks clever for ten minutes and becomes operational debt for six months. It hides the contract, loses the trace, and makes the next engineer debug vibes with a calendar invite. Beautiful work, if the goal was archaeology.
+</HallOfShame>
+
+## Why this matters in production
+
+<RealTalk>
+Production does not care that the demo was smooth. It cares whether the system can explain what happened, cap what it spends, resume after failure, and refuse dangerous work. Agent security earns its keep only when those controls are explicit.
+</RealTalk>
+
+The boring checklist is undefeated:
+
+- Inputs are typed and validated.
+- Expensive branches have budgets.
+- Risky actions have approval gates.
+- Every meaningful run is traceable.
+- The failure mode is named before users name it for you.
+
+## You can now brag that...
+
+- You can explain agent security without hiding behind framework mysticism.
+- You know when to allowlists, schemas, sandboxing, and approvals around risky tools.
+- You can spot trusting a prompt to enforce a policy that should live in code before it becomes a retro item.

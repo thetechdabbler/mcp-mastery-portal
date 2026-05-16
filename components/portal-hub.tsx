@@ -40,7 +40,7 @@ export function PortalHub({ stats }: PortalHubProps) {
 
       <ResumeReading />
 
-      <section className="grid gap-4 md:grid-cols-2">
+      <section className="grid gap-4 md:grid-cols-3">
         {stats.map((s) => (
           <TrackCard key={s.id} trackStats={s} highlighted={s.id === activeTrackId} />
         ))}

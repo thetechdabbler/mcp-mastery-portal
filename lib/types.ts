@@ -68,6 +68,23 @@ export type AgentcoreChapterDoc = {
   filePath: string;
 };
 
+export const langchainChapterFrontmatterSchema = chapterFrontmatterSchema
+  .omit({ specVersion: true, sdkVersion: true })
+  .extend({
+    track: z.literal("langchain"),
+    langchainVersion: z.string(),
+    langgraphVersion: z.string(),
+    pythonVersion: z.string(),
+    langsmith: z.boolean().optional(),
+  });
+export type LangchainChapterFrontmatter = z.infer<typeof langchainChapterFrontmatterSchema>;
+
+export type LangchainChapterDoc = {
+  frontmatter: LangchainChapterFrontmatter;
+  body: string;
+  filePath: string;
+};
+
 export const challengeManifestSchema = z.object({
   slug: z.string(),
   title: z.string(),

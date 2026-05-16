@@ -1,15 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { agentcoreChapterFrontmatterSchema, chapterFrontmatterSchema } from "../lib/types";
+import { agentcoreChapterFrontmatterSchema, chapterFrontmatterSchema, langchainChapterFrontmatterSchema } from "../lib/types";
 
 const root = process.cwd();
 const mcpChaptersDir = path.join(root, "content", "chapters");
 const agentcoreChaptersDir = path.join(root, "content", "agentcore", "chapters");
+const langchainChaptersDir = path.join(root, "content", "langchain", "chapters");
 const mcpPlaybookPath = path.join(root, "content", "security-playbook.mdx");
 const agentcorePlaybookPath = path.join(root, "content", "agentcore", "playbook.mdx");
+const langchainPlaybookPath = path.join(root, "content", "langchain", "playbook.mdx");
 const mcpDiagramsDir = path.join(root, "content", "diagrams");
 const agentcoreDiagramsDir = path.join(root, "content", "agentcore", "diagrams");
+const langchainDiagramsDir = path.join(root, "content", "langchain", "diagrams");
 const diagramsOutDir = path.join(root, "public", "diagrams");
 
 const diagramIds = new Set<string>();
@@ -58,9 +61,19 @@ for (const file of acFiles) {
   });
 }
 
+const lcFiles = fs.existsSync(langchainChaptersDir)
+  ? fs.readdirSync(langchainChaptersDir).filter((f) => f.endsWith(".mdx"))
+  : [];
+for (const file of lcFiles) {
+  scanMdx(path.join(langchainChaptersDir, file), `langchain/${file}`, (d) => {
+    langchainChapterFrontmatterSchema.parse(d);
+  });
+}
+
 for (const [playbookPath, name] of [
   [mcpPlaybookPath, "security-playbook.mdx"],
   [agentcorePlaybookPath, "agentcore/playbook.mdx"],
+  [langchainPlaybookPath, "langchain/playbook.mdx"],
 ] as const) {
   if (!fs.existsSync(playbookPath)) continue;
   const raw = fs.readFileSync(playbookPath, "utf8");
@@ -83,6 +96,8 @@ function d2PathForId(id: string): string | null {
   if (fs.existsSync(mcp)) return mcp;
   const ac = path.join(agentcoreDiagramsDir, `${id}.d2`);
   if (fs.existsSync(ac)) return ac;
+  const lc = path.join(langchainDiagramsDir, `${id}.d2`);
+  if (fs.existsSync(lc)) return lc;
   return null;
 }
 
@@ -106,6 +121,8 @@ console.log(
   "MCP chapters,",
   acFiles.length,
   "AgentCore chapters,",
+  lcFiles.length,
+  "LangChain chapters,",
   diagramIds.size,
   "diagram ids",
 );

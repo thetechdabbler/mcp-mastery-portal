@@ -1,4 +1,4 @@
-export type TrackId = "mcp" | "agentcore";
+export type TrackId = "mcp" | "agentcore" | "langchain";
 
 export type TrackLink = { href: string; label: string };
 
@@ -16,13 +16,8 @@ export type TrackConfig = {
 export const PREFERRED_TRACK_STORAGE_KEY = "mcp-mastery-preferred-track";
 export const SKIP_TRACK_CONFIRM_STORAGE_KEY = "mcp-mastery-skip-track-confirm";
 
-const AGENTCORE_PREFIX = "/agentcore";
-
 /** Portal hubs where track choice is intentional — no confirm dialog. */
-export const TRACK_HUB_PATHS = ["/", "/agentcore"] as const;
-
-/** MCP routes with no AgentCore equivalent (fallback to AgentCore chapters index). */
-const MCP_ONLY_PATH_PREFIXES = ["/security", "/playground", "/inspector", "/anti-patterns"] as const;
+export const TRACK_HUB_PATHS = ["/", "/agentcore", "/langchain"] as const;
 
 const SECTION_LABELS: Record<string, string> = {
   chapters: "Chapters",
@@ -75,6 +70,23 @@ export const TRACKS: TrackConfig[] = [
       { href: "/agentcore/capstone", label: "Capstone" },
     ],
   },
+  {
+    id: "langchain",
+    label: "LangChain & LangGraph",
+    shortLabel: "LangChain",
+    description: "Zero to hero with LangChain and LangGraph — runnables, retrieval, agents, and production.",
+    homeHref: "/langchain",
+    startHref: "/langchain/chapters/01-what-is-langchain",
+    chaptersIndexHref: "/langchain/chapters",
+    links: [
+      { href: "/langchain/chapters", label: "Chapters" },
+      { href: "/langchain/labs", label: "Labs" },
+      { href: "/langchain/challenges", label: "Challenges" },
+      { href: "/langchain/reference", label: "Reference" },
+      { href: "/langchain/playbook", label: "Playbook" },
+      { href: "/langchain/capstone", label: "Capstone" },
+    ],
+  },
 ];
 
 const TRACK_BY_ID = new Map(TRACKS.map((t) => [t.id, t]));
@@ -105,28 +117,43 @@ export function getTrackFromPathname(pathname: string): TrackConfig {
 
 export function chapterPathForTrack(trackId: TrackId, slug: string): string {
   const track = getTrack(trackId);
-  return track.id === "mcp"
-    ? `/chapters/${slug}`
-    : `/agentcore/chapters/${slug}`;
+  return track.id === "mcp" ? `/chapters/${slug}` : `${track.homeHref}/chapters/${slug}`;
 }
 
 function pathSuffix(pathname: string): string {
   const current = getTrackFromPathname(pathname);
-  if (current.id === "agentcore") {
-    if (pathname === AGENTCORE_PREFIX) return "";
-    return pathname.slice(AGENTCORE_PREFIX.length) || "";
+  if (current.id !== "mcp") {
+    if (pathname === current.homeHref) return "";
+    return pathname.slice(current.homeHref.length) || "";
   }
   return pathname === "/" ? "" : pathname;
 }
 
 function buildPathFromSuffix(suffix: string, targetTrackId: TrackId): string {
   const track = getTrack(targetTrackId);
-  if (targetTrackId === "agentcore") {
+  if (targetTrackId !== "mcp") {
     if (!suffix) return track.homeHref;
-    return `${AGENTCORE_PREFIX}${suffix.startsWith("/") ? suffix : `/${suffix}`}`;
+    return `${track.homeHref}${suffix.startsWith("/") ? suffix : `/${suffix}`}`;
   }
   if (!suffix) return track.homeHref;
   return suffix;
+}
+
+function sectionKeyForTrack(pathname: string, track: TrackConfig): string | undefined {
+  const suffix =
+    track.id === "mcp"
+      ? pathname === "/"
+        ? ""
+        : pathname
+      : pathname === track.homeHref
+        ? ""
+        : pathname.slice(track.homeHref.length);
+  return suffix.split("/").filter(Boolean)[0];
+}
+
+function targetTrackHasSection(targetTrack: TrackConfig, sectionKey: string | undefined): boolean {
+  if (!sectionKey) return true;
+  return targetTrack.links.some((link) => sectionKeyForTrack(link.href, targetTrack) === sectionKey);
 }
 
 function applyCrossTrackFallbacks(
@@ -136,20 +163,8 @@ function applyCrossTrackFallbacks(
 ): string {
   const current = getTrackFromPathname(pathname);
   if (current.id === targetTrackId) return pathname;
-
-  if (current.id === "mcp" && targetTrackId === "agentcore") {
-    for (const prefix of MCP_ONLY_PATH_PREFIXES) {
-      if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
-        return getTrack("agentcore").chaptersIndexHref;
-      }
-    }
-  }
-
-  if (current.id === "agentcore" && targetTrackId === "mcp") {
-    if (pathname === `${AGENTCORE_PREFIX}/playbook` || pathname.startsWith(`${AGENTCORE_PREFIX}/playbook/`)) {
-      return getTrack("mcp").chaptersIndexHref;
-    }
-  }
+  const target = getTrack(targetTrackId);
+  if (!targetTrackHasSection(target, sectionKeyForTrack(candidate, target))) return target.chaptersIndexHref;
 
   return candidate;
 }
@@ -190,7 +205,8 @@ export type PathDescription = {
 
 export function describePathForTrack(pathname: string): PathDescription {
   const parts = pathname.split("/").filter(Boolean);
-  const offset = parts[0] === "agentcore" ? 1 : 0;
+  const current = getTrackFromPathname(pathname);
+  const offset = current.id === "mcp" ? 0 : 1;
   const sectionKey = parts[offset];
   const sectionLabel = sectionKey
     ? (SECTION_LABELS[sectionKey] ?? sectionKey.replace(/-/g, " "))
