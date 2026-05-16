@@ -30,7 +30,8 @@ export function PortalHub({ stats }: PortalHubProps) {
         <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Portal</p>
         <h1 className="mt-2 text-4xl font-black tracking-tight">MCP Mastery Portal</h1>
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-          Choose a curriculum track. Your selection filters the top menu and is remembered on return visits.
+          Choose a curriculum track. The header switcher navigates to the matching section on the other track
+          (with a confirmation when you leave deep content).
         </p>
         <div className="mt-5">
           <TrackSwitcher variant="hero" navigateOnSelect />

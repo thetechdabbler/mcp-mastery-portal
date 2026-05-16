@@ -14,6 +14,28 @@ export type TrackConfig = {
 };
 
 export const PREFERRED_TRACK_STORAGE_KEY = "mcp-mastery-preferred-track";
+export const SKIP_TRACK_CONFIRM_STORAGE_KEY = "mcp-mastery-skip-track-confirm";
+
+const AGENTCORE_PREFIX = "/agentcore";
+
+/** Portal hubs where track choice is intentional — no confirm dialog. */
+export const TRACK_HUB_PATHS = ["/", "/agentcore"] as const;
+
+/** MCP routes with no AgentCore equivalent (fallback to AgentCore chapters index). */
+const MCP_ONLY_PATH_PREFIXES = ["/security", "/playground", "/inspector", "/anti-patterns"] as const;
+
+const SECTION_LABELS: Record<string, string> = {
+  chapters: "Chapters",
+  labs: "Labs",
+  challenges: "Challenges",
+  reference: "Reference",
+  security: "Security",
+  capstone: "Capstone",
+  playground: "Playground",
+  inspector: "Inspector",
+  "anti-patterns": "Anti-patterns",
+  playbook: "Playbook",
+};
 
 export const TRACKS: TrackConfig[] = [
   {
@@ -86,4 +108,109 @@ export function chapterPathForTrack(trackId: TrackId, slug: string): string {
   return track.id === "mcp"
     ? `/chapters/${slug}`
     : `/agentcore/chapters/${slug}`;
+}
+
+function pathSuffix(pathname: string): string {
+  const current = getTrackFromPathname(pathname);
+  if (current.id === "agentcore") {
+    if (pathname === AGENTCORE_PREFIX) return "";
+    return pathname.slice(AGENTCORE_PREFIX.length) || "";
+  }
+  return pathname === "/" ? "" : pathname;
+}
+
+function buildPathFromSuffix(suffix: string, targetTrackId: TrackId): string {
+  const track = getTrack(targetTrackId);
+  if (targetTrackId === "agentcore") {
+    if (!suffix) return track.homeHref;
+    return `${AGENTCORE_PREFIX}${suffix.startsWith("/") ? suffix : `/${suffix}`}`;
+  }
+  if (!suffix) return track.homeHref;
+  return suffix;
+}
+
+function applyCrossTrackFallbacks(
+  pathname: string,
+  targetTrackId: TrackId,
+  candidate: string,
+): string {
+  const current = getTrackFromPathname(pathname);
+  if (current.id === targetTrackId) return pathname;
+
+  if (current.id === "mcp" && targetTrackId === "agentcore") {
+    for (const prefix of MCP_ONLY_PATH_PREFIXES) {
+      if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
+        return getTrack("agentcore").chaptersIndexHref;
+      }
+    }
+  }
+
+  if (current.id === "agentcore" && targetTrackId === "mcp") {
+    if (pathname === `${AGENTCORE_PREFIX}/playbook` || pathname.startsWith(`${AGENTCORE_PREFIX}/playbook/`)) {
+      return getTrack("mcp").chaptersIndexHref;
+    }
+  }
+
+  return candidate;
+}
+
+/** Map current URL to the equivalent path on another track (with section fallbacks). */
+export function translatePathToTrack(pathname: string, targetTrackId: TrackId): string {
+  const current = getTrackFromPathname(pathname);
+  if (current.id === targetTrackId) return pathname;
+  const suffix = pathSuffix(pathname);
+  const candidate = buildPathFromSuffix(suffix, targetTrackId);
+  return applyCrossTrackFallbacks(pathname, targetTrackId, candidate);
+}
+
+/** True when translation uses a chapters-index fallback instead of a direct section map. */
+export function isTrackSwitchFallback(pathname: string, targetTrackId: TrackId): boolean {
+  const current = getTrackFromPathname(pathname);
+  if (current.id === targetTrackId) return false;
+  const suffix = pathSuffix(pathname);
+  const direct = buildPathFromSuffix(suffix, targetTrackId);
+  return translatePathToTrack(pathname, targetTrackId) !== direct;
+}
+
+export function isTrackHubPath(pathname: string): boolean {
+  return (TRACK_HUB_PATHS as readonly string[]).includes(pathname);
+}
+
+export function needsTrackSwitchConfirm(pathname: string, targetTrackId: TrackId): boolean {
+  const current = getTrackFromPathname(pathname);
+  if (current.id === targetTrackId) return false;
+  if (isTrackHubPath(pathname)) return false;
+  return true;
+}
+
+export type PathDescription = {
+  sectionLabel: string;
+  destinationLabel: string;
+};
+
+export function describePathForTrack(pathname: string): PathDescription {
+  const parts = pathname.split("/").filter(Boolean);
+  const offset = parts[0] === "agentcore" ? 1 : 0;
+  const sectionKey = parts[offset];
+  const sectionLabel = sectionKey
+    ? (SECTION_LABELS[sectionKey] ?? sectionKey.replace(/-/g, " "))
+    : "Home";
+  const slug = parts[offset + 1];
+  const detail =
+    sectionKey === "chapters" && slug
+      ? ` (${slug})`
+      : sectionKey === "labs" || sectionKey === "challenges"
+        ? slug
+          ? ` (${slug})`
+          : ""
+        : "";
+  return {
+    sectionLabel: `${sectionLabel}${detail}`,
+    destinationLabel: sectionLabel,
+  };
+}
+
+export function describeDestinationPath(pathname: string, targetTrackId: TrackId): PathDescription {
+  const href = translatePathToTrack(pathname, targetTrackId);
+  return describePathForTrack(href);
 }

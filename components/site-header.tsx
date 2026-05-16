@@ -2,12 +2,10 @@
 
 import Link from "next/link";
 import { SearchDialog } from "@/components/search-dialog";
+import { TrackSubnav } from "@/components/track-subnav";
 import { TrackSwitcher } from "@/components/track-switcher";
-import { useTrack } from "@/components/track-provider";
 
 export function SiteHeader() {
-  const { activeTrack } = useTrack();
-
   return (
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -17,18 +15,14 @@ export function SiteHeader() {
           </Link>
           <TrackSwitcher variant="header" />
         </div>
-        <nav className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-muted-foreground">
-          {activeTrack.links.map((l) => (
-            <Link key={l.href} href={l.href} className="hover:text-foreground">
-              {l.label}
-            </Link>
-          ))}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-medium text-muted-foreground">
           <Link href="/about" className="hover:text-foreground">
             About
           </Link>
           <SearchDialog />
-        </nav>
+        </div>
       </div>
+      <TrackSubnav />
     </header>
   );
 }
